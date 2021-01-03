@@ -1,3 +1,4 @@
 # List of untracked files to ignore
 test/testResults/
 test/testReports/
+*.asv
