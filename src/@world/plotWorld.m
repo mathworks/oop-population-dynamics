@@ -3,13 +3,11 @@ function obj = plotWorld(obj)
 %   This is only called once at start up to create the image, after that
 %   the objects update themselves.
 
-worldSidelen = size(obj.worldGrid, 1);
-
 figWorld = figure;
 axWorld = axes(figWorld);
 
-for ii = 1:worldSidelen
-    for jj = 1:worldSidelen
+for ii = 1:obj.edgeLength
+    for jj = 1:obj.edgeLength
         obj.worldGrid(ii, jj).FigObj = patch(axWorld, ...
             'XData', patchX(ii), ...
             'YData', patchY(jj), ...
@@ -17,8 +15,8 @@ for ii = 1:worldSidelen
             'LineStyle', 'none');
     end
 end
-axWorld.XLim = [0.5, worldSidelen + 0.5];
-axWorld.YLim = [0.5, worldSidelen + 0.5];
+axWorld.XLim = [0.5, obj.edgeLength + 0.5];
+axWorld.YLim = [0.5, obj.edgeLength + 0.5];
 
 % Add in the animals
 for ii = 1:numel(obj.myAnimals)
