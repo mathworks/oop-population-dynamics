@@ -3,6 +3,7 @@ classdef animal < organism
     %   Detailed explanation goes here
     
     properties
+        Marker string % Marker for this species
     end
     
     methods

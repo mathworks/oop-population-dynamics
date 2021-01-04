@@ -8,6 +8,7 @@ classdef (Abstract) organism
         Colour (3, 1) double % Default colour to plot this cell as
         Coordinate (2, 1) int16 % Coordinate that this organism is at
         ProbReproduce (1,1) double % Probability of breeding this turn
+        FigObj (1,1) % Line or patch object to draw the organism
     end
     
     methods

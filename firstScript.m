@@ -1,4 +1,4 @@
-clearvars
+clear all
 close all
 
 %% Set Up the Biology
@@ -16,6 +16,7 @@ propertiesSheep.InitialCount = 100;
 propertiesSheep.GainFromFood = 4;
 propertiesSheep.Reproduce = 0.04;
 propertiesSheep.Colour = [200, 200, 200] / 255;
+propertiesSheep.Marker = 'o';
 
 % Dingos
 propertiesDingo = struct('Class','animal');
@@ -25,6 +26,7 @@ propertiesDingo.InitialCount = 50;
 propertiesDingo.GainFromFood = 20;
 propertiesDingo.Reproduce = 0.05;
 propertiesDingo.Colour = [0, 0, 0] / 255;
+propertiesDingo.Marker = 'x';
 
 
 

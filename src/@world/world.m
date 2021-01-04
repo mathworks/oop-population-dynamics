@@ -12,12 +12,10 @@ classdef world
     properties (Access = public)
         worldGrid
         myAnimals
-        figWorld
         figPops
         myAxes
-        plantRGBMatrix
         nSteps
-        
+        worldPatches
     end
     
     methods
@@ -33,6 +31,7 @@ classdef world
             arguments
                 organisms
                 options.nSteps = 1000
+                options.worldSideLen = 100;
             end
             
             % Base properties.
@@ -41,7 +40,9 @@ classdef world
             % Create the base world grid
             aCell = plant('Grass', 'Earth', ...
                 'LivesForEver', true);
-            obj.worldGrid = repmat(aCell, 100, 100);
+            obj.worldGrid = repmat(aCell, ...
+                options.worldSideLen, ...
+                options.worldSideLen);
             
             obj.myAnimals = {};
             
@@ -53,6 +54,7 @@ classdef world
                             organisms{ii}.FeedsOn, ...
                             'Colour', organisms{ii}.Colour);
                         myAnimal.ProbReproduce = organisms{ii}.Reproduce;
+                        myAnimal.Marker = organisms{ii}.Marker;
                         obj.myAnimals{end+1} = repmat(myAnimal, ...
                             organisms{ii}.InitialCount, 1);
                         for jj = 1:organisms{ii}.InitialCount
@@ -67,19 +69,12 @@ classdef world
                 end
             end
             
-            % Build the first plant grid, then update as needed
-            % Build the grass grid:
-            obj.plantRGBMatrix = zeros(obj.edgeLength, obj.edgeLength, 3);
-            for ii = 1:obj.edgeLength
-                for jj = 1:obj.edgeLength
-                    obj.plantRGBMatrix(ii, jj, :) = obj.worldGrid(ii, jj).Colour;
-                end
-            end
+            % Set up the world figure
+            obj = plotWorld(obj);
         end
         
         function obj = run(obj)
             for ii = 1:obj.nSteps
-                obj = plotWorld(obj);
                 obj = plotPops(obj, ii);
 %                 obj = stepPlants(obj);
                 obj = stepAnimals(obj);
@@ -131,14 +126,16 @@ classdef world
                     end
                     
                     obj.myAnimals{ii}(jj).Coordinate = nextCoord;
+                    obj.myAnimals{ii}(jj).FigObj.XData = obj.myAnimals{ii}(jj).Coordinate(1);
+                    obj.myAnimals{ii}(jj).FigObj.YData = obj.myAnimals{ii}(jj).Coordinate(2);
                     
                     % Do we breed?
-                    breedDiceRoll = randi([0, 100], 1) / 100;
-                    if breedDiceRoll < obj.myAnimals{ii}(jj).ProbReproduce
-                        
-                    end
+%                     breedDiceRoll = randi([0, 100], 1) / 100;
+%                     if breedDiceRoll < obj.myAnimals{ii}(jj).ProbReproduce
+%                     end
                 end
             end
+            drawnow
         end
     end
 end
