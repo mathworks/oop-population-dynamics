@@ -32,6 +32,7 @@ for ii = 1:numel(obj.myAnimals)
     end
 end
 
+obj.axWorld = axWorld;
 drawnow
 end
 

@@ -1,4 +1,4 @@
-classdef (Abstract) organism
+classdef (Abstract) organism < handle
     %ORGANISM Base abstract class for plants and animals
     %   Detailed explanation goes here
     

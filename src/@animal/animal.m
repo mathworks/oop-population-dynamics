@@ -14,11 +14,21 @@ classdef animal < organism
                 Name string
                 FeedsOn string
                 options.Colour = [0, 0, 0] / 255;
+                options.ProbReproduce = 0;
+                options.GainFromFood = 1;
+                options.Energy = 1;
+                options.Marker = 'o';
+                options.Coordinate = [2, 2];
             end
             
             obj.Species = Name;
             obj.FeedsOn = FeedsOn;
             obj.Colour = options.Colour;
+            obj.GainFromFood = options.GainFromFood;
+            obj.Energy = options.Energy;
+            obj.Marker = options.Marker;
+            obj.Coordinate = options.Coordinate;
+            obj.ProbReproduce = options.ProbReproduce;
         end
     end
 end

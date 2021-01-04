@@ -16,6 +16,7 @@ classdef world
         myAxes
         nSteps
         worldPatches
+        axWorld
     end
     
     methods
@@ -38,12 +39,15 @@ classdef world
             % Base properties.
             obj.nSteps = options.nSteps;
             
-            % Create the base world grid
+            % Create the base world grid with plants:
             aCell = plant('Grass', 'Earth');
             aCell.Energy = Inf; % So lives forever.
             obj.worldGrid = repmat(aCell, ...
                 options.worldSideLen, ...
                 options.worldSideLen);
+            
+            
+            
             
             obj.myAnimals = {};
             
@@ -51,25 +55,19 @@ classdef world
             for ii = 1:numel(organisms)
                 switch organisms{ii}.Class
                     case 'animal'
-                        % Build the basic properties for this species
-                        myAnimal = animal(organisms{ii}.Name, ...
-                            organisms{ii}.FeedsOn, ...
-                            'Colour', organisms{ii}.Colour);
-                        myAnimal.ProbReproduce = organisms{ii}.Reproduce;
-                        myAnimal.Marker = organisms{ii}.Marker;
-                        myAnimal.GainFromFood = organisms{ii}.GainFromFood;
-                        
-                        % Breed across the board
-                        obj.myAnimals{end+1} = repmat(myAnimal, ...
-                            organisms{ii}.InitialCount, 1);
-                        
-                        % Randomly distribute across the grid and set
-                        % properties per animal
+                        % Build each animal individually directly on the
+                        % world grid:
                         for jj = 1:organisms{ii}.InitialCount
-                            obj.myAnimals{end}(jj).Coordinate = ...
-                                randi(obj.edgeLength, 2, 1);
-                            obj.myAnimals{end}(jj).Energy = ...
-                                randi([1, organisms{ii}.GainFromFood], 1);
+                            % Build the basic properties for this animal
+                            obj.myAnimals{ii}(jj) = animal(...
+                                organisms{ii}.Name, ...
+                                organisms{ii}.FeedsOn, ...
+                                'Colour', organisms{ii}.Colour, ...
+                                'ProbReproduce', organisms{ii}.Reproduce, ...
+                                'GainFromFood', organisms{ii}.GainFromFood, ...
+                                'Energy', randi([1, organisms{ii}.GainFromFood], 1), ...
+                                'Marker', organisms{ii}.Marker, ...
+                                'Coordinate', randi(obj.edgeLength, 2, 1));
                         end
                         
                     otherwise
@@ -79,7 +77,7 @@ classdef world
                 end
             end
             
-            % Set up the world figure
+            % Set up the world figure now that we have plants
             obj = plotWorld(obj);
         end
         
@@ -159,7 +157,28 @@ classdef world
                     breedDiceRoll = randi([0, 100], 1) / 100;
                     if breedDiceRoll < obj.myAnimals{ii}(jj).ProbReproduce
                         obj.myAnimals{ii}(jj).Energy = obj.myAnimals{ii}(jj).Energy / 2;
-                        bornAnimals{end+1} = obj.myAnimals{ii}(jj); %#ok<AGROW>
+                        newAnimal = animal(...
+                                obj.myAnimals{ii}(jj).Species, ...
+                                obj.myAnimals{ii}(jj).FeedsOn, ...
+                                'Colour', obj.myAnimals{ii}(jj).Colour, ...
+                                'ProbReproduce', obj.myAnimals{ii}(jj).ProbReproduce, ...
+                                'GainFromFood', obj.myAnimals{ii}(jj).GainFromFood, ...
+                                'Energy', randi([1, obj.myAnimals{ii}(jj).GainFromFood], 1), ...
+                                'Marker', obj.myAnimals{ii}(jj).Marker, ...
+                                'Coordinate', obj.myAnimals{ii}(jj).Coordinate);
+                        if isempty(bornAnimals)
+                            bornAnimals = newAnimal;
+                        else
+                            bornAnimals(end+1) = newAnimal; %#ok<AGROW>
+                        end
+                        localX = bornAnimals(end).Coordinate(1);
+                        localY = bornAnimals(end).Coordinate(2);
+                        bornAnimals(end).FigObj = line(obj.axWorld, ...
+                            localX, localY, 100, ...
+                            'LineStyle', 'none', ...
+                            'Marker', bornAnimals(end).Marker, ...
+                            'Color', bornAnimals(end).Colour, ...
+                            'LineWidth', 1);
                     end
                 end
                 
@@ -174,7 +193,7 @@ classdef world
                 end
                 
                 if ~isempty(bornAnimals)
-                    obj.myAnimals{ii} = vertcat(obj.myAnimals{ii}, bornAnimals{:});
+                    obj.myAnimals{ii} = horzcat(obj.myAnimals{ii}, bornAnimals);
                 end
             end
         end
