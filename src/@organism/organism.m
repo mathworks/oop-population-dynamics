@@ -9,13 +9,18 @@ classdef (Abstract) organism
         Coordinate (2, 1) int16 % Coordinate that this organism is at
         ProbReproduce (1,1) double % Probability of breeding this turn
         FigObj (1,1) % Line or patch object to draw the organism
+        Energy (1,1) double % Energy when zero organism dies
+        GainFromFood (1,1) double % How much energy gain from one food
     end
     
     methods
+        % Method signatures
         function obj = organism
             % Abstract constructor of this class.  Must have a concrete
             % method in the final subclass.
         end
+        
+        
     end
 end
 

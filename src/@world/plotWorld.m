@@ -33,7 +33,6 @@ for ii = 1:numel(obj.myAnimals)
 end
 
 drawnow
-pause(1)
 end
 
 function xIdxs = patchX(xIdx)

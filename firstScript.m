@@ -1,11 +1,10 @@
-clear all
+clearvars
 close all
 
 %% Set Up the Biology
 % Grass
 % propertiesGrass = struct('Class', 'plant');
 % propertiesGrass.Name = 'Grass';
-% propertiesGrass.LivesForEver = true;
 % propertiesGrass.percentOfWorld = 100;
 
 % Sheep

@@ -3,7 +3,6 @@ classdef plant < organism
     %   Detailed explanation goes here
     
     properties (Access = public)
-        LivesForEver (1,1) logical
     end
     
     methods
@@ -13,13 +12,11 @@ classdef plant < organism
             arguments
                 Name string
                 FeedsOn string
-                options.LivesForEver logical = false
                 options.Colour = [70, 242, 128] / 255;
             end
            
             obj.Species = Name;
             obj.FeedsOn = FeedsOn;
-            obj.LivesForEver = options.LivesForEver;
             obj.Colour = options.Colour;
         end
     end
