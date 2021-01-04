@@ -29,8 +29,6 @@ propertiesDingo.Colour = [0, 0, 0] / 255;
 propertiesDingo.Marker = 'x';
 
 
-
-
 %% Set Up The World
 mySim = world({propertiesSheep, propertiesDingo})
 

@@ -78,6 +78,8 @@ classdef world
                 obj = plotPops(obj, ii);
 %                 obj = stepPlants(obj);
                 obj = stepAnimals(obj);
+                % End of timestep so:
+                drawnow
             end
         end
         
@@ -135,7 +137,6 @@ classdef world
 %                     end
                 end
             end
-            drawnow
         end
     end
 end
