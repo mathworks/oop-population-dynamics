@@ -2,8 +2,9 @@ classdef world < handle
     %WORLD Summary of this class goes here
     %   Detailed explanation goes here
     
-    properties(Access = public, Dependent = true, SetObservable)
+    properties(Access = public, Dependent = true)
         worldColour
+        animalLocations
     end
     
     properties (Access = public)
@@ -140,9 +141,7 @@ classdef world < handle
                     end
                     
                     obj.myAnimals{ii}(jj).Coordinate = nextCoord;
-                    obj.myAnimals{ii}(jj).FigObj.XData = obj.myAnimals{ii}(jj).Coordinate(1);
-                    obj.myAnimals{ii}(jj).FigObj.YData = obj.myAnimals{ii}(jj).Coordinate(2);
-                    
+
                     % Eat
                     obj = eats(obj, ii, jj);
                     
@@ -174,12 +173,6 @@ classdef world < handle
                         end
                         localX = bornAnimals(end).Coordinate(1);
                         localY = bornAnimals(end).Coordinate(2);
-                        bornAnimals(end).FigObj = line(obj.axWorld, ...
-                            localX, localY, 100, ...
-                            'LineStyle', 'none', ...
-                            'Marker', bornAnimals(end).Marker, ...
-                            'Color', bornAnimals(end).Colour, ...
-                            'LineWidth', 1);
                     end
                 end
                 
@@ -188,7 +181,6 @@ classdef world < handle
                 if ~isempty(idxDeaths)
                     for kk = 1:numel(idxDeaths)
                         idxToDelete = idxDeaths(kk);
-                        delete(obj.myAnimals{ii}(idxToDelete).FigObj)
                     end
                     obj.myAnimals{ii}(idxDeaths) = [];
                 end
@@ -206,6 +198,20 @@ classdef world < handle
             for ii = 1:obj.edgeLength
                 for jj = 1:obj.edgeLength
                     colourGrid(ii, jj, :) = obj.worldGrid(ii, jj).Colour;
+                end
+            end
+        end
+        
+        function animalLocs = get.animalLocations(obj)
+            for ii = 1:numel(obj.myAnimals)
+                myAnimal = obj.myAnimals{ii};
+                animalLocs(ii).Colour = myAnimal(ii).Colour;
+                animalLocs(ii).Marker = myAnimal(ii).Marker;
+                
+                nAnimals = numel(myAnimal);
+                animalLocs(ii).coord = zeros(nAnimals, 2);
+                for jj = 1:nAnimals
+                    animalLocs(ii).coord(jj, :) = myAnimal(jj).Coordinate;
                 end
             end
         end

@@ -22,7 +22,6 @@ elseif obj.myAnimals{idxSpecies}(idxAnimal).FeedsOn == "Sheep"
         foodNearMe = foodNearMe(idxFood);
     end
     % Food dies
-    delete(obj.myAnimals{1}(foodNearMe).FigObj);
     obj.myAnimals{1}(foodNearMe) = [];
 end
 
