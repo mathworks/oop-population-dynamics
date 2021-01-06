@@ -1,7 +1,7 @@
 function obj = eats(obj, idxSpecies, idxAnimal)
 
-localX = obj.myAnimals{idxSpecies}(idxAnimal).Coordinate(1);
-localY = obj.myAnimals{idxSpecies}(idxAnimal).Coordinate(2);
+localX = round(obj.myAnimals{idxSpecies}(idxAnimal).Coordinate(1));
+localY = round(obj.myAnimals{idxSpecies}(idxAnimal).Coordinate(2));
 
 if obj.myAnimals{idxSpecies}(idxAnimal).FeedsOn == "Grass"
     if obj.worldGrid(localX, localY).Energy > 1

@@ -9,7 +9,7 @@ classdef world < handle
     
     properties (Access = public)
         % Size of one edge of the world:
-        edgeLength int16 = 100
+        edgeLength double = 100
         populationCounts double
     end
     
