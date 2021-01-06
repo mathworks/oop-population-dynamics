@@ -30,6 +30,24 @@ classdef animal < organism
             obj.Coordinate = options.Coordinate;
             obj.ProbReproduce = options.ProbReproduce;
         end
+        
+        function obj = move(obj, edgeLength)
+            % Base movement of an animal based on a random walk
+            currCoord = obj.Coordinate;
+            nextStep = randi(3, 2, 1, 'int16') - int16(2);
+            nextCoord = currCoord + nextStep;
+            
+            for kk = 1:2
+                if nextCoord(kk) > edgeLength
+                    nextCoord(kk) = nextCoord(kk) - int16(edgeLength);
+                end
+                if nextCoord(kk) < 1
+                    nextCoord(kk) = nextCoord(kk) + int16(edgeLength);
+                end
+            end
+            
+            obj.Coordinate = nextCoord;
+        end
     end
 end
 

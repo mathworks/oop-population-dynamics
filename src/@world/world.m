@@ -127,20 +127,9 @@ classdef world < handle
                 bornAnimals = {};
                 
                 for jj = 1:numel(obj.myAnimals{ii})
-                    currCoord = obj.myAnimals{ii}(jj).Coordinate;
-                    nextStep = randi(3, 2, 1, 'int16') - int16(2);
-                    nextCoord = currCoord + nextStep;
-                    
-                    for kk = 1:2
-                        if nextCoord(kk) > obj.edgeLength
-                            nextCoord(kk) = nextCoord(kk) - int16(obj.edgeLength);
-                        end
-                        if nextCoord(kk) < 1
-                            nextCoord(kk) = nextCoord(kk) + int16(obj.edgeLength);
-                        end
-                    end
-                    
-                    obj.myAnimals{ii}(jj).Coordinate = nextCoord;
+                    % Move
+                    obj.myAnimals{ii}(jj) = ...
+                        obj.myAnimals{ii}(jj).move(obj.edgeLength);
 
                     % Eat
                     obj = eats(obj, ii, jj);
