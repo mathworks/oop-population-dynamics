@@ -1,29 +1,38 @@
 function obj = plotWorld(obj)
 %PLOTWORLD Function to plot the world figure
-%   This is only called once at start up to create the image, after that
-%   the objects update themselves.
 
-figWorld = figure;
-axWorld = axes(figWorld);
-
-for ii = 1:obj.edgeLength
-    for jj = 1:obj.edgeLength
-        obj.worldGrid(ii, jj).FigObj = patch(axWorld, ...
-            'XData', patchX(ii), ...
-            'YData', patchY(jj), ...
-            'FaceColor', obj.worldGrid(ii, jj).Colour, ...
-            'LineStyle', 'none');
-    end
+if isempty(obj.axWorld)
+    figWorld = figure;
+    obj.axWorld = axes(figWorld);
+else
+    delete(obj.axWorld.Children);
 end
-axWorld.XLim = [0.5, obj.edgeLength + 0.5];
-axWorld.YLim = [0.5, obj.edgeLength + 0.5];
+
+persistent locX myZ colourGrid
+if isempty(locX) || isempty(myZ) || isempty(colourGrid)
+    locX = 0.5:1:double(obj.edgeLength)+0.5;
+    myZ = zeros(obj.edgeLength+1, obj.edgeLength+1);
+    colourGrid = obj.worldColour;
+    colourGrid(end+1, :, :) = colourGrid(end, :, :);
+    colourGrid(:, end+1, :) = colourGrid(:, end, :);
+end
+
+colourGrid(1:obj.edgeLength, 1:obj.edgeLength, :) = obj.worldColour;
+
+surf(obj.axWorld, ...
+    locX, locX, myZ, ...
+    colourGrid, ...
+    'LineStyle', 'none');
+view(obj.axWorld, 2)
+obj.axWorld.XLim = [0.5, obj.edgeLength + 0.5];
+obj.axWorld.YLim = [0.5, obj.edgeLength + 0.5];
 
 % Add in the animals
 for ii = 1:numel(obj.myAnimals)
     for jj = 1:numel(obj.myAnimals{ii})
         localX = obj.myAnimals{ii}(jj).Coordinate(1);
         localY = obj.myAnimals{ii}(jj).Coordinate(2);
-        obj.myAnimals{ii}(jj).FigObj = line(axWorld, ...
+        obj.myAnimals{ii}(jj).FigObj = line(obj.axWorld, ...
             localX, localY, 100, ...
             'LineStyle', 'none', ...
             'Marker', obj.myAnimals{ii}(jj).Marker, ...
@@ -32,25 +41,6 @@ for ii = 1:numel(obj.myAnimals)
     end
 end
 
-obj.axWorld = axWorld;
-drawnow
-end
-
-function xIdxs = patchX(xIdx)
-xIdxs = zeros(4, 1);
-
-xIdxs(1) = xIdx - 0.5;
-xIdxs(2) = xIdx + 0.5;
-xIdxs(3) = xIdx + 0.5;
-xIdxs(4) = xIdx - 0.5;
-end
-
-function yIdxs = patchY(yIdx)
-yIdxs = zeros(4, 1);
-
-yIdxs(1) = yIdx - 0.5;
-yIdxs(2) = yIdx - 0.5;
-yIdxs(3) = yIdx + 0.5;
-yIdxs(4) = yIdx + 0.5;
+drawnow()
 
 end

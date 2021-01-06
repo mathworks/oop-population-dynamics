@@ -29,7 +29,7 @@ propertiesDingo.Marker = 'x';
 
 
 %% Set Up The World
-mySim = world({propertiesSheep, propertiesDingo})
+mySim = world({propertiesSheep, propertiesDingo});
 
-% Runs
+%% Run
 run(mySim)

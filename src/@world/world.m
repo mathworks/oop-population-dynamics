@@ -1,6 +1,10 @@
-classdef world
+classdef world < handle
     %WORLD Summary of this class goes here
     %   Detailed explanation goes here
+    
+    properties(Access = public, Dependent = true, SetObservable)
+        worldColour
+    end
     
     properties (Access = public)
         % Size of one edge of the world:
@@ -45,10 +49,7 @@ classdef world
             obj.worldGrid = repmat(aCell, ...
                 options.worldSideLen, ...
                 options.worldSideLen);
-            
-            
-            
-            
+
             obj.myAnimals = {};
             
             % Unpack the organisms
@@ -77,8 +78,8 @@ classdef world
                 end
             end
             
-            % Set up the world figure now that we have plants
-            obj = plotWorld(obj);
+            % initial set up so plot
+            plotWorld(obj)
         end
         
         function obj = run(obj)
@@ -87,7 +88,7 @@ classdef world
 %                 obj = stepPlants(obj);
                 obj = stepAnimals(obj);
                 % End of timestep so:
-                drawnow
+                plotWorld(obj)
             end
         end
         
@@ -194,6 +195,17 @@ classdef world
                 
                 if ~isempty(bornAnimals)
                     obj.myAnimals{ii} = horzcat(obj.myAnimals{ii}, bornAnimals);
+                end
+            end
+        end
+    end
+    
+    methods % get/set
+        function colourGrid = get.worldColour(obj)
+            colourGrid = zeros(obj.edgeLength, obj.edgeLength, 3);
+            for ii = 1:obj.edgeLength
+                for jj = 1:obj.edgeLength
+                    colourGrid(ii, jj, :) = obj.worldGrid(ii, jj).Colour;
                 end
             end
         end
