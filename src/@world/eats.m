@@ -10,8 +10,8 @@ if obj.myAnimals{idxSpecies}(idxAnimal).FeedsOn == "Grass"
 elseif obj.myAnimals{idxSpecies}(idxAnimal).FeedsOn == "Sheep"
     foodLocs = [obj.myAnimals{1}.Coordinate];
     foodNearMe = find(...
-        abs(foodLocs(1, :) - localX) <= 1 & ...
-        abs(foodLocs(2, :) - localY) <= 1);
+        abs(foodLocs(1, :) - localX) <= 1.25 & ...
+        abs(foodLocs(2, :) - localY) <= 1.25);
     if isempty(foodNearMe)
         % Hungry predator
         return
