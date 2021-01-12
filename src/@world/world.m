@@ -101,6 +101,9 @@ classdef world < handle
                 obj = stepAnimals(obj);
                 % End of timestep so:
                 plotWorld(obj);
+                if endCheck(obj)
+                    break
+                end
             end
         end
         
@@ -191,6 +194,19 @@ classdef world < handle
                 end
                 
                 obj.myAnimals{ii} = myCurrAnimals;
+            end
+        end
+    end
+    
+    methods (Access = private)
+        function atTheEnd = endCheck(obj)
+            atTheEnd = false;
+            
+            for ii = 1:numel(obj.myAnimals)
+                if numel(obj.myAnimals{ii}) == 0
+                    atTheEnd = true;
+                    break
+                end
             end
         end
     end
