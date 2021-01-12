@@ -29,6 +29,8 @@ myDingos = animal('Name', 'Dingo', ...
     'Coordinate', [0, 0]);
 nDingos = 50;
 
+%% Plot a food web
+plotFoodWeb({mySheep, myDingos})
 
 %% Set Up The World
 mySim = world({mySheep, myDingos}, ...

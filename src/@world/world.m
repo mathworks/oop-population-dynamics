@@ -92,18 +92,19 @@ classdef world < handle
             
             % initial set up so plot
             plotWorld(obj);
+            obj = plotPops(obj, ii);
         end
         
         function obj = run(obj)
             for ii = 1:obj.nSteps
-                obj = plotPops(obj, ii);
 %                 obj = stepPlants(obj);
                 obj = stepAnimals(obj);
                 % End of timestep so:
-                plotWorld(obj);
                 if endCheck(obj)
                     break
                 end
+                plotWorld(obj);
+                obj = plotPops(obj, ii);
             end
         end
         
@@ -127,7 +128,8 @@ classdef world < handle
                     'Linewidth', 1);
                 myLegendItems{ii} = obj.myAnimals{ii}(1).Species;
             end
-            legend(myLines, myLegendItems)
+            legend(myLines, myLegendItems, ...
+                'Location', 'NorthWest')
             popAxes.YLim(1) = 0;          
         end
         
