@@ -80,7 +80,7 @@ classdef world < handle
             end
             
             % initial set up so plot
-            plotWorld(obj)
+            plotWorld(obj);
         end
         
         function obj = run(obj)
@@ -89,7 +89,7 @@ classdef world < handle
 %                 obj = stepPlants(obj);
                 obj = stepAnimals(obj);
                 % End of timestep so:
-                plotWorld(obj)
+                plotWorld(obj);
             end
         end
         
