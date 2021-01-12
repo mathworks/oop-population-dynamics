@@ -30,13 +30,14 @@ classdef world < handle
         obj = eats(obj, idxSpecies, idxAnimal)
         
         % Full methods    
-        function obj = world(organisms, options)
+        function obj = world(organisms, initialCounts, options)
             %WORLD Construct an instance of this class
             %   This constructor builds the initial arrays and sets up the
             %   simulation ready to run.
             
             arguments
                 organisms
+                initialCounts
                 options.nSteps = 1000
                 options.worldSideLen = 100;
             end
@@ -55,23 +56,33 @@ classdef world < handle
             
             % Unpack the organisms
             for ii = 1:numel(organisms)
-                switch organisms{ii}.Class
+                organism = organisms{ii};
+                switch class(organism)
                     case 'animal'
                         % Build each animal individually directly on the
                         % world grid:
-                        for jj = 1:organisms{ii}.InitialCount
+                        clear groupAnimals
+                        groupAnimals(initialCounts(ii), 1) = ...
+                            animal('Name', organism.Species, ...
+                            'FeedsOn', organism.FeedsOn, ...
+                            'ProbReproduce', organism.ProbReproduce, ...
+                            'GainFromFood', organism.GainFromFood, ...
+                            'Energy', 1, ...
+                            'Colour', organism.Colour, ...
+                            'Marker', organism.Marker, ...
+                            'Coordinate', [0, 0]); %#ok<AGROW>
+                        for jj = 1:initialCounts(ii)
                             % Build the basic properties for this animal
-                            obj.myAnimals{ii}(jj) = animal(...
-                                organisms{ii}.Name, ...
-                                organisms{ii}.FeedsOn, ...
-                                'Colour', organisms{ii}.Colour, ...
-                                'ProbReproduce', organisms{ii}.Reproduce, ...
-                                'GainFromFood', organisms{ii}.GainFromFood, ...
-                                'Energy', randi([1, organisms{ii}.GainFromFood], 1), ...
-                                'Marker', organisms{ii}.Marker, ...
+                            groupAnimals(jj) = animal('Name', organism.Species, ...
+                                'FeedsOn', organism.FeedsOn, ...
+                                'ProbReproduce', organism.ProbReproduce, ...
+                                'GainFromFood', organism.GainFromFood, ...
+                                'Energy', randi([1, organism.GainFromFood], 1), ...
+                                'Colour', organism.Colour, ...
+                                'Marker', organism.Marker, ...
                                 'Coordinate', randi(obj.edgeLength, 2, 1));
                         end
-                        
+                        obj.myAnimals{ii} = groupAnimals;
                     otherwise
                         error('WORLD:Construct:UnknownClass', ...
                             'Unknown class: %s', ...
@@ -123,20 +134,21 @@ classdef world < handle
         
         function obj = stepAnimals(obj)
             for ii = 1:numel(obj.myAnimals)
+                myCurrAnimals = obj.myAnimals{ii};
                 idxDeaths = [];
                 bornAnimals = {};
                 
-                for jj = 1:numel(obj.myAnimals{ii})
+                for jj = 1:numel(myCurrAnimals)
                     % Move
-                    obj.myAnimals{ii}(jj) = ...
-                        obj.myAnimals{ii}(jj).move(obj.edgeLength);
+                    myCurrAnimals(jj) = ...
+                        myCurrAnimals(jj).move(obj.edgeLength);
 
                     % Eat
                     obj = eats(obj, ii, jj);
                     
                     % Expend energy
-                    obj.myAnimals{ii}(jj).Energy = obj.myAnimals{ii}(jj).Energy - 1;
-                    if obj.myAnimals{ii}(jj).Energy <= 0
+                    myCurrAnimals(jj).Energy = myCurrAnimals(jj).Energy - 1;
+                    if myCurrAnimals(jj).Energy <= 0
                         % We die
                         idxDeaths(end+1) = jj; %#ok<AGROW>
                         continue
@@ -144,24 +156,24 @@ classdef world < handle
                     
                     % Do we breed?
                     breedDiceRoll = randi([0, 100], 1) / 100;
-                    if breedDiceRoll < obj.myAnimals{ii}(jj).ProbReproduce
-                        obj.myAnimals{ii}(jj).Energy = obj.myAnimals{ii}(jj).Energy / 2;
+                    if breedDiceRoll < myCurrAnimals(jj).ProbReproduce
+                        myCurrAnimals(jj).Energy = myCurrAnimals(jj).Energy / 2;
                         newAnimal = animal(...
-                                obj.myAnimals{ii}(jj).Species, ...
-                                obj.myAnimals{ii}(jj).FeedsOn, ...
-                                'Colour', obj.myAnimals{ii}(jj).Colour, ...
-                                'ProbReproduce', obj.myAnimals{ii}(jj).ProbReproduce, ...
-                                'GainFromFood', obj.myAnimals{ii}(jj).GainFromFood, ...
-                                'Energy', randi([1, obj.myAnimals{ii}(jj).GainFromFood], 1), ...
-                                'Marker', obj.myAnimals{ii}(jj).Marker, ...
-                                'Coordinate', obj.myAnimals{ii}(jj).Coordinate);
+                                'Name', myCurrAnimals(jj).Species, ...
+                                'FeedsOn', myCurrAnimals(jj).FeedsOn, ...
+                                'Colour', myCurrAnimals(jj).Colour, ...
+                                'ProbReproduce', myCurrAnimals(jj).ProbReproduce, ...
+                                'GainFromFood', myCurrAnimals(jj).GainFromFood, ...
+                                'Energy', myCurrAnimals(jj).Energy, ...
+                                'Marker', myCurrAnimals(jj).Marker, ...
+                                'Coordinate', myCurrAnimals(jj).Coordinate);
                         if isempty(bornAnimals)
                             bornAnimals = newAnimal;
                         else
-                            bornAnimals(end+1) = newAnimal; %#ok<AGROW>
+                            bornAnimals(end+1, 1) = newAnimal; %#ok<AGROW>
                         end
-                        localX = bornAnimals(end).Coordinate(1);
-                        localY = bornAnimals(end).Coordinate(2);
+%                         localX = bornAnimals(end, 1).Coordinate(1);
+%                         localY = bornAnimals(end, 1).Coordinate(2);
                     end
                 end
                 
@@ -171,12 +183,14 @@ classdef world < handle
                     for kk = 1:numel(idxDeaths)
                         idxToDelete = idxDeaths(kk);
                     end
-                    obj.myAnimals{ii}(idxDeaths) = [];
+                    myCurrAnimals(idxDeaths) = [];
                 end
                 
                 if ~isempty(bornAnimals)
-                    obj.myAnimals{ii} = horzcat(obj.myAnimals{ii}, bornAnimals);
+                    myCurrAnimals = vertcat(myCurrAnimals, bornAnimals);
                 end
+                
+                obj.myAnimals{ii} = myCurrAnimals;
             end
         end
     end
@@ -194,14 +208,9 @@ classdef world < handle
         function animalLocs = get.animalLocations(obj)
             for ii = 1:numel(obj.myAnimals)
                 myAnimal = obj.myAnimals{ii};
-                animalLocs(ii).Colour = myAnimal(ii).Colour;
-                animalLocs(ii).Marker = myAnimal(ii).Marker;
-                
-                nAnimals = numel(myAnimal);
-                animalLocs(ii).coord = zeros(nAnimals, 2);
-                for jj = 1:nAnimals
-                    animalLocs(ii).coord(jj, :) = myAnimal(jj).Coordinate;
-                end
+                animalLocs(ii).Colour = myAnimal(ii).Colour; %#ok<AGROW>
+                animalLocs(ii).Marker = myAnimal(ii).Marker; %#ok<AGROW>
+                animalLocs(ii).coord = [myAnimal.Coordinate]'; %#ok<AGROW>
             end
         end
     end
