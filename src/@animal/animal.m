@@ -12,22 +12,22 @@ classdef animal < organism
     end
     
     methods
-        function obj = animal(Name, FeedsOn, options)
+        function obj = animal(options)
             %ANIMAL Construct an instance of this class
             %   Detailed explanation goes here
             arguments
-                Name string
-                FeedsOn string
+                options.Name string = ""
+                options.FeedsOn string = ""
                 options.Colour = [0, 0, 0] / 255;
                 options.ProbReproduce = 0;
                 options.GainFromFood = 1;
                 options.Energy = 1;
                 options.Marker = 'o';
-                options.Coordinate = [2, 2];
+                options.Coordinate = [1, 1];
             end
             
-            obj.Species = Name;
-            obj.FeedsOn = FeedsOn;
+            obj.Species = options.Name;
+            obj.FeedsOn = options.FeedsOn;
             obj.Colour = options.Colour;
             obj.GainFromFood = options.GainFromFood;
             obj.Energy = options.Energy;
