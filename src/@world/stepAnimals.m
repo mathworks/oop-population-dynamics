@@ -9,15 +9,12 @@ for ii = numel(obj.foodOrder):-1:1
         continue
     end
     
-    
     myCurrAnimals = obj.myAnimals{idxAnimal};
-    idxDeaths = [];
     bornAnimals = {};
     
     for jj = 1:numel(myCurrAnimals)
         % Move
-        myCurrAnimals(jj) = ...
-            myCurrAnimals(jj).move(obj.edgeLength);
+        myCurrAnimals(jj) = myCurrAnimals(jj).move(obj.edgeLength);
         
         % Eat
         obj = eats(obj, idxAnimal, jj);
@@ -26,7 +23,7 @@ for ii = numel(obj.foodOrder):-1:1
         myCurrAnimals(jj).Energy = myCurrAnimals(jj).Energy - 1;
         if myCurrAnimals(jj).Energy <= 0
             % We die
-            idxDeaths(end+1) = jj; %#ok<AGROW>
+            myCurrAnimals(jj).IsAlive = false;
             continue
         end
         
@@ -48,22 +45,16 @@ for ii = numel(obj.foodOrder):-1:1
             else
                 bornAnimals(end+1, 1) = newAnimal; %#ok<AGROW>
             end
-            %                         localX = bornAnimals(end, 1).Coordinate(1);
-            %                         localY = bornAnimals(end, 1).Coordinate(2);
         end
     end
     
     % Kill hungry animals and birth new ones
     %TODO: this is hack, probably should be a handle class
-    if ~isempty(idxDeaths)
-        for kk = 1:numel(idxDeaths)
-            idxToDelete = idxDeaths(kk);
-        end
-        myCurrAnimals(idxDeaths) = [];
-    end
+    idxToDrop = ~[myCurrAnimals.IsAlive];
+    myCurrAnimals(idxToDrop) = [];
     
     if ~isempty(bornAnimals)
-        myCurrAnimals = vertcat(myCurrAnimals, bornAnimals);
+        myCurrAnimals = vertcat(myCurrAnimals, bornAnimals); %#ok<AGROW>
     end
     
     obj.myAnimals{idxAnimal} = myCurrAnimals;

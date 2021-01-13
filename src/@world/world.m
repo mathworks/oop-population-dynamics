@@ -162,6 +162,15 @@ classdef world < handle
             myAxes = axes(myFigure);
             plot(myAxes, obj.foodWeb)
         end
+        
+        function idxOfPrey = getAnimalIdxByName(obj, speciesName)
+            for ii = 1:numel(obj.myAnimals)
+                if speciesName == obj.myAnimals{ii}(1).Species
+                    idxOfPrey = ii;
+                    break;
+                end
+            end
+        end
     end
     
     methods (Access = private)

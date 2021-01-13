@@ -3,12 +3,14 @@ clear classes
 clear all
 close all
 
+% for repeatability while testing
+rng('default')
+
 %% Set Up the Biology
 % Grass
 myGrass = plant('Name', 'Grass', ...
     'FeedsOn', "", ...
     'Colour', [70, 242, 128] / 255);
-
 
 % Sheep
 mySheep = animal('Name', 'Sheep', ...
