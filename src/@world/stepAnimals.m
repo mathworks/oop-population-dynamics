@@ -1,6 +1,16 @@
 function obj = stepAnimals(obj)
-for ii = 1:numel(obj.myAnimals)
-    myCurrAnimals = obj.myAnimals{ii};
+
+% Do the animals in reverse food chain order, that is process the prey
+% before the predator.
+
+for ii = numel(obj.foodOrder):-1:1
+    [isAnimal, idxAnimal]= isAnimalFromWeb(obj, obj.foodOrder(ii));
+    if ~isAnimal
+        continue
+    end
+    
+    
+    myCurrAnimals = obj.myAnimals{idxAnimal};
     idxDeaths = [];
     bornAnimals = {};
     
@@ -10,7 +20,7 @@ for ii = 1:numel(obj.myAnimals)
             myCurrAnimals(jj).move(obj.edgeLength);
         
         % Eat
-        obj = eats(obj, ii, jj);
+        obj = eats(obj, idxAnimal, jj);
         
         % Expend energy
         myCurrAnimals(jj).Energy = myCurrAnimals(jj).Energy - 1;
@@ -56,7 +66,7 @@ for ii = 1:numel(obj.myAnimals)
         myCurrAnimals = vertcat(myCurrAnimals, bornAnimals);
     end
     
-    obj.myAnimals{ii} = myCurrAnimals;
+    obj.myAnimals{idxAnimal} = myCurrAnimals;
 end
 end
 

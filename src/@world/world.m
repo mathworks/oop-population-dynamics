@@ -32,6 +32,7 @@ classdef world < handle
         obj = eats(obj, idxSpecies, idxAnimal)
         obj = getFoodWeb(obj)
         obj = stepAnimals(obj)
+        [myOrganism, idxAnimals] = isAnimalFromWeb(obj, idxSpecies)
         
         % Full methods    
         function obj = world(organisms, initialCounts, options)
