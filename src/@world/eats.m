@@ -9,9 +9,9 @@ if obj.myAnimals{idxSpecies}(idxAnimal).FeedsOn == "Grass"
     if obj.worldGrid(localX, localY).Energy > 1
         obj.worldGrid(localX, localY).Energy = obj.worldGrid(localX, localY).Energy - 1;
     end
-elseif obj.myAnimals{idxSpecies}(idxAnimal).FeedsOn == "Sheep"
+else
     if idxAnimal == 1 || isempty(idxOfPrey)
-        idxOfPrey = getAnimalIdxByName(obj, "Sheep");
+        idxOfPrey = getAnimalIdxByName(obj, obj.myAnimals{idxSpecies}(idxAnimal).FeedsOn);
         foodLocs = [obj.myAnimals{idxOfPrey}.Coordinate];
     end
     
