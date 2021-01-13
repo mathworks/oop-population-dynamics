@@ -22,12 +22,14 @@ classdef world < handle
         nSteps
         worldPatches
         axWorld
+        foodWeb
     end
     
     methods
         % Method signatures
         obj = plotWorld(obj)
         obj = eats(obj, idxSpecies, idxAnimal)
+        obj = getFoodWeb(obj)
         
         % Full methods    
         function obj = world(organisms, initialCounts, options)
@@ -89,6 +91,9 @@ classdef world < handle
                             thisOrganism.Class)
                 end
             end
+            
+            % Create the food web
+            obj = getFoodWeb(obj)
             
             % initial set up so plot
             plotWorld(obj);
@@ -197,6 +202,12 @@ classdef world < handle
                 
                 obj.myAnimals{ii} = myCurrAnimals;
             end
+        end
+        
+        function myFigure = plotFoodWeb(obj)
+            myFigure = figure();
+            myAxes = axes(myFigure);
+            plot(myAxes, obj.foodWeb)
         end
     end
     
