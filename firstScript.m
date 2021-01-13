@@ -3,9 +3,10 @@ close all
 
 %% Set Up the Biology
 % Grass
-% propertiesGrass = struct('Class', 'plant');
-% propertiesGrass.Name = 'Grass';
-% propertiesGrass.percentOfWorld = 100;
+myGrass = plant('Name', 'Grass', ...
+    'FeedsOn', "", ...
+    'Colour', [70, 242, 128] / 255);
+
 
 % Sheep
 mySheep = animal('Name', 'Sheep', ...

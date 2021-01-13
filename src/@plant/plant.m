@@ -6,18 +6,20 @@ classdef plant < organism
     end
     
     methods
-        function obj = plant(Name, FeedsOn, options)
+        function obj = plant(options)
             %PLANT Construct an instance of this class
             %   Detailed explanation goes here
             arguments
-                Name string
-                FeedsOn string
+                options.Name string = ""
+                options.FeedsOn string = ""
                 options.Colour = [70, 242, 128] / 255;
+                options.Energy = Inf;
             end
            
-            obj.Species = Name;
-            obj.FeedsOn = FeedsOn;
+            obj.Species = options.Name;
+            obj.FeedsOn = options.FeedsOn;
             obj.Colour = options.Colour;
+            obj.Energy = options.Energy;
         end
     end
 end
