@@ -14,12 +14,14 @@ classdef plant < organism
                 options.FeedsOn string = ""
                 options.Colour = [70, 242, 128] / 255;
                 options.Energy = Inf;
+                options.Coordinate = [1, 1];
             end
            
             obj.Species = options.Name;
             obj.FeedsOn = options.FeedsOn;
             obj.Colour = options.Colour;
             obj.Energy = options.Energy;
+            obj.Coordinate = options.Coordinate;
         end
     end
 end

@@ -1,4 +1,6 @@
-clearvars
+clear all
+clear classes
+clear all
 close all
 
 %% Set Up the Biology
@@ -31,11 +33,12 @@ myDingos = animal('Name', 'Dingo', ...
 nDingos = 50;
 
 %% Set Up The World
-mySim = world({mySheep, myDingos}, ...
-    [nSheep, nDingos]);
+mySim = world({myGrass, mySheep, myDingos}, ...
+    [Inf, nSheep, nDingos], ...
+    'nSteps', 150);
 
 %% Plot a food web
 plotFoodWeb(mySim)
 
 %% Run
-% run(mySim)
+run(mySim)

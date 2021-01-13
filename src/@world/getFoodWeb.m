@@ -26,5 +26,7 @@ for ii = 1:numel(obj.myAnimals)
     obj.foodWeb = addedge(obj.foodWeb, speciesExists, foodExists);
 end
 
+obj.foodOrder = toposort(obj.foodWeb);
+
 end
 

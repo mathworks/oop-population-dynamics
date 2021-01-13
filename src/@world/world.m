@@ -23,6 +23,7 @@ classdef world < handle
         worldPatches
         axWorld
         foodWeb
+        foodOrder
     end
     
     methods
@@ -30,6 +31,7 @@ classdef world < handle
         obj = plotWorld(obj)
         obj = eats(obj, idxSpecies, idxAnimal)
         obj = getFoodWeb(obj)
+        obj = stepAnimals(obj)
         
         % Full methods    
         function obj = world(organisms, initialCounts, options)
@@ -46,20 +48,29 @@ classdef world < handle
             
             % Base properties.
             obj.nSteps = options.nSteps;
-            
-            % Create the base world grid with plants:
-            aCell = plant('Grass', 'Earth');
-            aCell.Energy = Inf; % So lives forever.
-            obj.worldGrid = repmat(aCell, ...
-                options.worldSideLen, ...
-                options.worldSideLen);
 
+            % Prepare to unpack
             obj.myAnimals = {};
+            animalCounter = 1;
             
             % Unpack the organisms
             for ii = 1:numel(organisms)
                 organism = organisms{ii};
                 switch class(organism)
+                    case 'plant'
+                        % Build the world grid
+                        obj.worldGrid = repmat(organism, ...
+                            options.worldSideLen, ...
+                            options.worldSideLen);
+                        for jj = 1:obj.edgeLength
+                            for kk = 1:obj.edgeLength
+                                obj.worldGrid(jj, kk) = ...
+                                    plant('Name', organism.Species, ...
+                                    'FeedsOn', organism.FeedsOn, ...
+                                    'Colour', organism.Colour, ...
+                                    'Coordinate', [jj, kk]);
+                            end
+                        end
                     case 'animal'
                         % Build each animal individually directly on the
                         % world grid:
@@ -84,16 +95,17 @@ classdef world < handle
                                 'Marker', organism.Marker, ...
                                 'Coordinate', randi(obj.edgeLength, 2, 1));
                         end
-                        obj.myAnimals{ii} = groupAnimals;
+                        obj.myAnimals{animalCounter} = groupAnimals;
+                        animalCounter = animalCounter + 1;
                     otherwise
                         error('WORLD:Construct:UnknownClass', ...
                             'Unknown class: %s', ...
                             thisOrganism.Class)
                 end
             end
-            
+           
             % Create the food web
-            obj = getFoodWeb(obj)
+            obj = getFoodWeb(obj);
             
             % initial set up so plot
             plotWorld(obj);
@@ -102,7 +114,7 @@ classdef world < handle
         
         function obj = run(obj)
             for ii = 1:obj.nSteps
-%                 obj = stepPlants(obj);
+                obj = stepPlants(obj);
                 obj = stepAnimals(obj);
                 % End of timestep so:
                 if endCheck(obj)
@@ -142,67 +154,7 @@ classdef world < handle
 %             % Not needed for V1
 %         end
         
-        function obj = stepAnimals(obj)
-            for ii = 1:numel(obj.myAnimals)
-                myCurrAnimals = obj.myAnimals{ii};
-                idxDeaths = [];
-                bornAnimals = {};
-                
-                for jj = 1:numel(myCurrAnimals)
-                    % Move
-                    myCurrAnimals(jj) = ...
-                        myCurrAnimals(jj).move(obj.edgeLength);
-
-                    % Eat
-                    obj = eats(obj, ii, jj);
-                    
-                    % Expend energy
-                    myCurrAnimals(jj).Energy = myCurrAnimals(jj).Energy - 1;
-                    if myCurrAnimals(jj).Energy <= 0
-                        % We die
-                        idxDeaths(end+1) = jj; %#ok<AGROW>
-                        continue
-                    end
-                    
-                    % Do we breed?
-                    breedDiceRoll = randi([0, 100], 1) / 100;
-                    if breedDiceRoll < myCurrAnimals(jj).ProbReproduce
-                        myCurrAnimals(jj).Energy = myCurrAnimals(jj).Energy / 2;
-                        newAnimal = animal(...
-                                'Name', myCurrAnimals(jj).Species, ...
-                                'FeedsOn', myCurrAnimals(jj).FeedsOn, ...
-                                'Colour', myCurrAnimals(jj).Colour, ...
-                                'ProbReproduce', myCurrAnimals(jj).ProbReproduce, ...
-                                'GainFromFood', myCurrAnimals(jj).GainFromFood, ...
-                                'Energy', myCurrAnimals(jj).Energy, ...
-                                'Marker', myCurrAnimals(jj).Marker, ...
-                                'Coordinate', myCurrAnimals(jj).Coordinate);
-                        if isempty(bornAnimals)
-                            bornAnimals = newAnimal;
-                        else
-                            bornAnimals(end+1, 1) = newAnimal; %#ok<AGROW>
-                        end
-%                         localX = bornAnimals(end, 1).Coordinate(1);
-%                         localY = bornAnimals(end, 1).Coordinate(2);
-                    end
-                end
-                
-                % Kill hungry animals and birth new ones
-                %TODO: this is hack, probably should be a handle class
-                if ~isempty(idxDeaths)
-                    for kk = 1:numel(idxDeaths)
-                        idxToDelete = idxDeaths(kk);
-                    end
-                    myCurrAnimals(idxDeaths) = [];
-                end
-                
-                if ~isempty(bornAnimals)
-                    myCurrAnimals = vertcat(myCurrAnimals, bornAnimals);
-                end
-                
-                obj.myAnimals{ii} = myCurrAnimals;
-            end
-        end
+        
         
         function myFigure = plotFoodWeb(obj)
             myFigure = figure();

@@ -10,6 +10,7 @@ classdef (Abstract) organism < handle
         ProbReproduce (1,1) double % Probability of breeding this turn
         Energy (1,1) double % Energy when zero organism dies
         GainFromFood (1,1) double % How much energy gain from one food
+        IsAlive (1,1) logical = true % Logical to test if alive
     end
     
     methods
