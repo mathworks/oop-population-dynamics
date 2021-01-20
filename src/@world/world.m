@@ -18,7 +18,8 @@ classdef world < handle
         worldGrid
         myAnimals
         figPops
-        myAxes
+        handleSurface
+        handleAnimals
         nSteps
         worldPatches
         axWorld
