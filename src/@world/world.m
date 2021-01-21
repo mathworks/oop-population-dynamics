@@ -161,10 +161,14 @@ classdef world < handle
         
         
         
-        function myFigure = plotFoodWeb(obj)
-            myFigure = figure();
+        function varargout = plotFoodWeb(obj)
+            myFigure = figure;
             myAxes = axes(myFigure);
-            plot(myAxes, obj.foodWeb)
+            plot(myAxes, obj.foodWeb);
+            
+            if nargout == 1
+                varargout{1} = myFigure;
+            end
         end
         
         function idxOfPrey = getAnimalIdxByName(obj, speciesName)
