@@ -6,6 +6,7 @@ classdef (Abstract) organism < handle
         Species string % Name of the species, e.g. sheep, kangaroo, dingo
         FeedsOn string % Name of the species that we feed on
         Colour (3, 1) double % Default colour to plot this cell as
+        LineColour (3, 1) double % Line colour can be different to world colour
         Coordinate (2, 1) double % Coordinate that this organism is at
         ProbReproduce (1,1) double % Probability of breeding this turn
         Energy (1,1) double % Energy when zero organism dies

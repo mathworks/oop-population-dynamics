@@ -19,6 +19,7 @@ classdef animal < organism
                 options.Name string = ""
                 options.FeedsOn string = ""
                 options.Colour = [0, 0, 0] / 255;
+                options.LineColour;
                 options.ProbReproduce = 0;
                 options.GainFromFood = 1;
                 options.Energy = 1;
@@ -29,6 +30,11 @@ classdef animal < organism
             obj.Species = options.Name;
             obj.FeedsOn = options.FeedsOn;
             obj.Colour = options.Colour;
+            if isfield(options, 'LineColour')
+                obj.LineColour = options.LineColour;
+            else
+                obj.LineColour = obj.Colour;
+            end
             obj.GainFromFood = options.GainFromFood;
             obj.Energy = options.Energy;
             obj.Marker = options.Marker;
