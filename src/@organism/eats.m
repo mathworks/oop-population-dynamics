@@ -1,6 +1,14 @@
 function eats(obj, world)
 
-persistent foodLocs idxOfPrey
+persistent foodLocs idxOfPrey previousPrey
+
+if isempty(previousPrey) || obj.FeedsOn ~= previousPrey
+    previousPrey = obj.FeedsOn;
+    idxOfPrey = getAnimalIdxByName(world, previousPrey);
+    if idxOfPrey >= 1
+        foodLocs = [world.myAnimals{idxOfPrey}.Coordinate];
+    end
+end
 
 localX = round(obj.Coordinate(1));
 localY = round(obj.Coordinate(2));
@@ -11,11 +19,6 @@ if obj.FeedsOn == "Grass"
         world.worldGrid(localX, localY).Energy = world.worldGrid(localX, localY).Energy - 1;
     end
 else
-    if idxAnimal == 1 || isempty(idxOfPrey)
-        idxOfPrey = getAnimalIdxByName(obj, obj.myAnimals{idxSpecies}(idxAnimal).FeedsOn);
-        foodLocs = [obj.myAnimals{idxOfPrey}.Coordinate];
-    end
-    
     foodNearMe = find(...
         abs(foodLocs(1, :) - localX) <= 1.25 & ...
         abs(foodLocs(2, :) - localY) <= 1.25);
@@ -26,12 +29,13 @@ else
     
     % Drop dead animals
     for ii = numel(foodNearMe):-1:1
-        if ~obj.myAnimals{1}(foodNearMe(ii)).IsAlive
+        if ~world.myAnimals{1}(foodNearMe(ii)).IsAlive
             foodNearMe(ii) = [];
         end
     end
     % Check if there is still some food
     if isempty(foodNearMe)
+        % Hungry predator
         return
     end
     if numel(foodNearMe) > 1
@@ -40,7 +44,7 @@ else
         foodNearMe = foodNearMe(idxFood);
     end
     % Food dies
-    obj.myAnimals{idxOfPrey}(foodNearMe).IsAlive = false;
+    world.myAnimals{idxOfPrey}(foodNearMe).IsAlive = false;
 end
 
 % Common code

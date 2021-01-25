@@ -171,6 +171,7 @@ classdef world < handle
         end
         
         function idxOfPrey = getAnimalIdxByName(obj, speciesName)
+            idxOfPrey = -1;
             for ii = 1:numel(obj.myAnimals)
                 if speciesName == obj.myAnimals{ii}(1).Species
                     idxOfPrey = ii;

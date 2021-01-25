@@ -13,6 +13,10 @@ for ii = numel(obj.foodOrder):-1:1
     bornAnimals = {};
     
     for jj = 1:numel(myCurrAnimals)
+        % Sanity check for dead animal 
+        if ~myCurrAnimals(jj).IsAlive
+            continue
+        end
         % Move
         myCurrAnimals(jj) = myCurrAnimals(jj).move(obj.edgeLength);
         
