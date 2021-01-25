@@ -3,6 +3,7 @@ classdef plant < organism
     %   Detailed explanation goes here
     
     properties (Access = public)
+        stepDied double % To track how long to regrow
     end
     
     methods
@@ -22,6 +23,14 @@ classdef plant < organism
             obj.Colour = options.Colour;
             obj.Energy = options.Energy;
             obj.Coordinate = options.Coordinate;
+        end
+        
+        function isEaten(obj, currTimeStep)
+            obj.Energy = obj.Energy - 1;
+            if obj.Energy <= 0
+                obj.IsAlive = false;
+                obj.stepDied = currTimeStep;
+            end
         end
     end
 end

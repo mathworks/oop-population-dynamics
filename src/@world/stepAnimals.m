@@ -1,4 +1,4 @@
-function obj = stepAnimals(obj)
+function obj = stepAnimals(obj, currTimeStep)
 
 % Do the animals in reverse food chain order, that is process the prey
 % before the predator.
@@ -21,7 +21,7 @@ for ii = numel(obj.foodOrder):-1:1
         myCurrAnimals(jj) = myCurrAnimals(jj).move(obj.edgeLength);
         
         % Eat
-        myCurrAnimals(jj).eats(obj);
+        myCurrAnimals(jj).eats(obj, currTimeStep);
         
         % Expend energy
         myCurrAnimals(jj).expendEnergy()

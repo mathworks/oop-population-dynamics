@@ -16,7 +16,7 @@ classdef (Abstract) organism < handle
     
     methods
         % Method signatures
-        eats(obj, world)
+        eats(obj, world, currTimeStep)
         
         function obj = organism
             % Abstract constructor of this class.  Must have a concrete

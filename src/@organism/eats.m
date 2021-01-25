@@ -1,4 +1,4 @@
-function eats(obj, world)
+function eats(obj, world, currTimeStep)
 
 persistent foodLocs idxOfPrey previousPrey
 
@@ -16,7 +16,7 @@ localY = round(obj.Coordinate(2));
 if obj.FeedsOn == "Grass"
     %TODO: change this to automatically die the plant with a method
     if world.worldGrid(localX, localY).Energy > 1
-        world.worldGrid(localX, localY).Energy = world.worldGrid(localX, localY).Energy - 1;
+        world.worldGrid(localX, localY).isEaten(currTimeStep);
     end
 else
     foodNearMe = find(...

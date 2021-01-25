@@ -31,7 +31,7 @@ classdef world < handle
         % Method signatures
         obj = plotWorld(obj)
         obj = getFoodWeb(obj)
-        obj = stepAnimals(obj)
+        obj = stepAnimals(obj, currTimeStep)
         [myOrganism, idxAnimals] = isAnimalFromWeb(obj, idxSpecies)
         
         % Full methods    
@@ -119,7 +119,7 @@ classdef world < handle
         function obj = run(obj)
             for ii = 1:obj.nSteps
                 obj = stepPlants(obj);
-                obj = stepAnimals(obj);
+                obj = stepAnimals(obj, ii);
                 % End of timestep so:
                 if endCheck(obj)
                     break
