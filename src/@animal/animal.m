@@ -75,12 +75,6 @@ classdef animal < organism
             
             obj.Coordinate = nextCoord;
         end
-        
-        %TODO: this should move to organism and be used for all plants and
-        %   animals
-        function increaseEnergy(obj)
-            obj.Energy = obj.Energy + obj.GainFromFood;
-        end
     end
 end
 

@@ -24,10 +24,8 @@ for ii = numel(obj.foodOrder):-1:1
         myCurrAnimals(jj).eats(obj);
         
         % Expend energy
-        myCurrAnimals(jj).Energy = myCurrAnimals(jj).Energy - 1;
-        if myCurrAnimals(jj).Energy <= 0
-            % We die
-            myCurrAnimals(jj).IsAlive = false;
+        myCurrAnimals(jj).expendEnergy()
+        if ~myCurrAnimals(jj).IsAlive
             continue
         end
         

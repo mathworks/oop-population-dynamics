@@ -23,7 +23,15 @@ classdef (Abstract) organism < handle
             % method in the final subclass.
         end
         
-        
+        function increaseEnergy(obj)
+            obj.Energy = obj.Energy + obj.GainFromFood;
+        end
+        function expendEnergy(obj)
+            obj.Energy = obj.Energy - 1;
+            if obj.Energy <= 0
+                obj.IsAlive = false;
+            end
+        end
     end
 end
 
