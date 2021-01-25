@@ -3,7 +3,9 @@ classdef plant < organism
     %   Detailed explanation goes here
     
     properties (Access = public)
-        stepDied double % To track how long to regrow
+        StepDied double % To track how long to regrow
+        ColourDead (3,1) double % To track the alive colour
+        ColourAlive (3,1) double % To track the dead colour
     end
     
     methods
@@ -14,22 +16,38 @@ classdef plant < organism
                 options.Name string = ""
                 options.FeedsOn string = ""
                 options.Colour = [70, 242, 128] / 255;
-                options.Energy = Inf;
+                options.LineColour = [70, 242, 128] / 255;
                 options.Coordinate = [1, 1];
+                options.ProbReproduce = 1;
+                options.Energy = Inf;
+                options.GainFromFood = 1;
+                options.IsAlive = true;
+                
+                options.ColourAlive = [70, 242, 128] / 255;
+                options.ColourDead = [63, 93, 35] / 255;
             end
-           
+            % Properties from organism:
             obj.Species = options.Name;
             obj.FeedsOn = options.FeedsOn;
             obj.Colour = options.Colour;
-            obj.Energy = options.Energy;
+            obj.LineColour = options.LineColour;
             obj.Coordinate = options.Coordinate;
+            obj.ProbReproduce = options.ProbReproduce;
+            obj.Energy = options.Energy;
+            obj.GainFromFood = options.GainFromFood;
+            obj.IsAlive = options.IsAlive;
+            
+            % Properties from plant:
+            obj.StepDied = -1;
+            obj.ColourAlive = options.ColourAlive;
+            obj.ColourDead = options.ColourDead;
         end
         
         function isEaten(obj, currTimeStep)
             obj.Energy = obj.Energy - 1;
             if obj.Energy <= 0
                 obj.IsAlive = false;
-                obj.stepDied = currTimeStep;
+                obj.StepDied = currTimeStep;
             end
         end
     end

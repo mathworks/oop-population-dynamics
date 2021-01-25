@@ -13,8 +13,8 @@ end
 localX = round(obj.Coordinate(1));
 localY = round(obj.Coordinate(2));
 
+%TODO: this should be smarter for a plant class
 if obj.FeedsOn == "Grass"
-    %TODO: change this to automatically die the plant with a method
     if world.worldGrid(localX, localY).Energy > 1
         world.worldGrid(localX, localY).isEaten(currTimeStep);
     end
