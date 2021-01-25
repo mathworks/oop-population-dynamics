@@ -17,7 +17,7 @@ for ii = numel(obj.foodOrder):-1:1
         myCurrAnimals(jj) = myCurrAnimals(jj).move(obj.edgeLength);
         
         % Eat
-        obj = eats(obj, idxAnimal, jj);
+        myCurrAnimals(jj).eats(obj);
         
         % Expend energy
         myCurrAnimals(jj).Energy = myCurrAnimals(jj).Energy - 1;

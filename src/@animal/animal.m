@@ -76,7 +76,7 @@ classdef animal < organism
             obj.Coordinate = nextCoord;
         end
         
-        function obj = increaseEnergy(obj)
+        function increaseEnergy(obj)
             obj.Energy = obj.Energy + obj.GainFromFood;
         end
     end

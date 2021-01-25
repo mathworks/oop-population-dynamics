@@ -1,13 +1,14 @@
-function obj = eats(obj, idxSpecies, idxAnimal)
+function eats(obj, world)
 
 persistent foodLocs idxOfPrey
 
-localX = round(obj.myAnimals{idxSpecies}(idxAnimal).Coordinate(1));
-localY = round(obj.myAnimals{idxSpecies}(idxAnimal).Coordinate(2));
+localX = round(obj.Coordinate(1));
+localY = round(obj.Coordinate(2));
 
-if obj.myAnimals{idxSpecies}(idxAnimal).FeedsOn == "Grass"
-    if obj.worldGrid(localX, localY).Energy > 1
-        obj.worldGrid(localX, localY).Energy = obj.worldGrid(localX, localY).Energy - 1;
+if obj.FeedsOn == "Grass"
+    %TODO: change this to automatically die the plant with a method
+    if world.worldGrid(localX, localY).Energy > 1
+        world.worldGrid(localX, localY).Energy = world.worldGrid(localX, localY).Energy - 1;
     end
 else
     if idxAnimal == 1 || isempty(idxOfPrey)
@@ -43,6 +44,6 @@ else
 end
 
 % Common code
-increaseEnergy(obj.myAnimals{idxSpecies}(idxAnimal));
+increaseEnergy(obj);
 end
 

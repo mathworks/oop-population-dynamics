@@ -30,7 +30,6 @@ classdef world < handle
     methods
         % Method signatures
         obj = plotWorld(obj)
-        obj = eats(obj, idxSpecies, idxAnimal)
         obj = getFoodWeb(obj)
         obj = stepAnimals(obj)
         [myOrganism, idxAnimals] = isAnimalFromWeb(obj, idxSpecies)
