@@ -22,7 +22,7 @@ for ii = numel(obj.foodOrder):-1:1
             continue
         end
         % Move
-        currAnimal = currAnimal.move(obj.edgeLength);
+        currAnimal.move(obj.edgeLength);
         
         % Eat
         currAnimal.eats(obj);
