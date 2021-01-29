@@ -5,6 +5,7 @@ classdef world < handle
     properties(Access = public, Dependent = true)
         worldColour
         animalLocations
+        plantAliveCount
     end
     
     properties (Access = public)
@@ -122,7 +123,7 @@ classdef world < handle
             
             % initial set up so plot
             plotWorld(obj);
-            obj = plotPops(obj, ii);
+            obj = plotPops(obj);
         end
         
         function obj = run(obj)
@@ -135,30 +136,38 @@ classdef world < handle
                     break
                 end
                 plotWorld(obj);
-                obj = plotPops(obj, ii);
+                obj = plotPops(obj);
             end
         end
         
-        function obj = plotPops(obj, currStep)
+        function obj = plotPops(obj)
+            plantDivider = 4;
             nOrganisms = numel(obj.myAnimals);
             if isempty(obj.figPops)
                 obj.figPops = figure;
-                obj.populationCounts = NaN(obj.nSteps, nOrganisms);
+                obj.populationCounts = NaN(obj.nSteps + 1, nOrganisms + 1);
             end
             
             clf(obj.figPops)
             popAxes = gca(obj.figPops);
-            myLines = zeros(numel(obj.myAnimals), 1);
-            myLegendItems = cell(numel(obj.myAnimals), 1);
+            myLines = zeros(numel(obj.myAnimals) + 1, 1);
+            myLegendItems = cell(numel(obj.myAnimals) + 1, 1);
             for ii = 1:numel(obj.myAnimals)
-                obj.populationCounts(currStep, ii) = numel(obj.myAnimals{ii});
+                obj.populationCounts(obj.currTimeStep+1, ii) = numel(obj.myAnimals{ii});
                 myLines(ii) = line(popAxes, ...
-                    1:currStep, ...
-                    obj.populationCounts(1:currStep, ii), ...
+                    0:obj.currTimeStep, ...
+                    obj.populationCounts(1:obj.currTimeStep+1, ii), ...
                     'Color', obj.myAnimals{ii}(1).LineColour, ...
                     'Linewidth', 1);
                 myLegendItems{ii} = obj.myAnimals{ii}(1).Species;
             end
+            obj.populationCounts(obj.currTimeStep+1, end) = obj.plantAliveCount;
+            myLines(end) = line(popAxes, ...
+                1:obj.currTimeStep+1, ...
+                obj.populationCounts(1:obj.currTimeStep+1, end) / plantDivider, ...
+                'Color', obj.worldGrid(1,1).ColourAlive, ...
+                'LineWidth' , 1);
+            myLegendItems{end} = ['Plants (/', num2str(plantDivider), ')'];
             legend(myLines, myLegendItems, ...
                 'Location', 'NorthWest')
             popAxes.YLim(1) = 0;          
@@ -224,6 +233,10 @@ classdef world < handle
                 animalLocs(ii).Marker = myAnimal(1).Marker; %#ok<AGROW>
                 animalLocs(ii).coord = [myAnimal.Coordinate]'; %#ok<AGROW>
             end
+        end
+        
+        function plantSum = get.plantAliveCount(obj)
+            plantSum = sum([obj.worldGrid(:).IsAlive]);
         end
     end
 end
