@@ -196,10 +196,13 @@ classdef world < handle
     
     methods % get/set
         function colourGrid = get.worldColour(obj)
+            % NB: ii and jj are transposed to match the CDATA array we are
+            % using later in the code to only update rather than full
+            % redraw
             colourGrid = zeros(obj.edgeLength, obj.edgeLength, 3);
             for ii = 1:obj.edgeLength
                 for jj = 1:obj.edgeLength
-                    colourGrid(ii, jj, :) = obj.worldGrid(ii, jj).Colour;
+                    colourGrid(jj, ii, :) = obj.worldGrid(ii, jj).Colour;
                 end
             end
         end

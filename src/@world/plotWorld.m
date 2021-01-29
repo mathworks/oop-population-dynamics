@@ -45,7 +45,7 @@ if isempty(obj.handleSurface)
     hold on
     obj.handleSurface = surf(obj.axWorld, ...
         locX, locX, myZ, ...
-        pagetranspose(colourGrid), ...
+        colourGrid, ...
         'LineStyle', 'none');
     hold off
     view(obj.axWorld, 2)
@@ -57,6 +57,13 @@ else
 end
 
 
+persistent handleTitle
+titleText = ['Simulation at Step: ', num2str(obj.currTimeStep)];
+if isempty(handleTitle)
+    handleTitle = title(titleText);
+else
+    handleTitle.String = titleText;
+end
 
 drawnow()
 
