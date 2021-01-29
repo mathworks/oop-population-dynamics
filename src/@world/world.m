@@ -15,7 +15,7 @@ classdef world < handle
     
     %TODO: make these private when finished:
     properties (Access = public)
-        worldGrid
+        worldGrid plant
         myAnimals
         figPops
         handleSurface
@@ -25,6 +25,8 @@ classdef world < handle
         axWorld
         foodWeb
         foodOrder
+        currTimeStep double = 0
+        debug = false
     end
     
     methods
@@ -45,10 +47,13 @@ classdef world < handle
                 initialCounts
                 options.nSteps = 1000
                 options.worldSideLen = 100;
+                options.debug = false;
             end
             
             % Base properties.
             obj.nSteps = options.nSteps;
+            obj.edgeLength = options.worldSideLen;
+            obj.debug = options.debug;
 
             % Prepare to unpack
             obj.myAnimals = {};
@@ -60,16 +65,20 @@ classdef world < handle
                 switch class(organism)
                     case 'plant'
                         % Build the world grid
-                        obj.worldGrid = repmat(organism, ...
-                            options.worldSideLen, ...
-                            options.worldSideLen);
+                        obj.worldGrid(obj.edgeLength, obj.edgeLength) = organism;
                         for jj = 1:obj.edgeLength
                             for kk = 1:obj.edgeLength
-                                obj.worldGrid(jj, kk) = ...
-                                    plant('Name', organism.Species, ...
-                                    'FeedsOn', organism.FeedsOn, ...
-                                    'Colour', organism.Colour, ...
-                                    'Coordinate', [jj, kk]);
+                                obj.worldGrid(jj, kk) = copy(organism);
+                                obj.worldGrid(jj, kk).Coordinate = [jj, kk];
+                                if ~isinf(organism.Energy)
+                                    probAlive = randi([0 1], 1);
+                                    if ~probAlive
+                                        obj.worldGrid(jj, kk).IsAlive = false;
+                                        obj.worldGrid(jj, kk).Energy = 0;
+                                        obj.worldGrid(jj, kk).Colour = organism.ColourDead;
+                                        obj.worldGrid(jj, kk).StepDied = randi([1, organism.TimeToRegrow], 1) - 30 + 1;
+                                    end
+                                end
                             end
                         end
                     case 'animal'
@@ -82,7 +91,7 @@ classdef world < handle
                             'FeedsOn', organism.FeedsOn, ...
                             'ProbReproduce', organism.ProbReproduce, ...
                             'GainFromFood', organism.GainFromFood, ...
-                            'Energy', 1, ...
+                            'Energy', 2 * randi([1, organism.GainFromFood], 1), ...
                             'Colour', organism.Colour, ...
                             'LineColour', organism.LineColour, ...
                             'Marker', organism.Marker, ...
@@ -118,8 +127,9 @@ classdef world < handle
         
         function obj = run(obj)
             for ii = 1:obj.nSteps
+                obj.currTimeStep = ii;
                 obj = stepPlants(obj);
-                obj = stepAnimals(obj, ii);
+                obj = stepAnimals(obj);
                 % End of timestep so:
                 if endCheck(obj)
                     break
@@ -210,8 +220,8 @@ classdef world < handle
         function animalLocs = get.animalLocations(obj)
             for ii = 1:numel(obj.myAnimals)
                 myAnimal = obj.myAnimals{ii};
-                animalLocs(ii).Colour = myAnimal(ii).Colour; %#ok<AGROW>
-                animalLocs(ii).Marker = myAnimal(ii).Marker; %#ok<AGROW>
+                animalLocs(ii).Colour = myAnimal(1).Colour; %#ok<AGROW>
+                animalLocs(ii).Marker = myAnimal(1).Marker; %#ok<AGROW>
                 animalLocs(ii).coord = [myAnimal.Coordinate]'; %#ok<AGROW>
             end
         end

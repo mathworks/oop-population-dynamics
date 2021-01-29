@@ -1,4 +1,5 @@
-classdef (Abstract) organism < handle
+classdef (Abstract) organism < handle & ...
+        matlab.mixin.Copyable
     %ORGANISM Base abstract class for plants and animals
     %   Detailed explanation goes here
     
@@ -16,7 +17,7 @@ classdef (Abstract) organism < handle
     
     methods
         % Method signatures
-        eats(obj, world, currTimeStep)
+        eats(obj, world)
         
         function obj = organism
             % Abstract constructor of this class.  Must have a concrete

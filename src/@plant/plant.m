@@ -3,9 +3,10 @@ classdef plant < organism
     %   Detailed explanation goes here
     
     properties (Access = public)
-        StepDied double % To track how long to regrow
+        StepDied (1,1) double % To track how long to regrow
         ColourDead (3,1) double % To track the alive colour
         ColourAlive (3,1) double % To track the dead colour
+        TimeToRegrow (1,1) double % how long to stay dead
     end
     
     methods
@@ -24,7 +25,8 @@ classdef plant < organism
                 options.IsAlive = true;
                 
                 options.ColourAlive = [70, 242, 128] / 255;
-                options.ColourDead = [63, 93, 35] / 255;
+                options.ColourDead = [240, 197, 149] / 255;
+                options.TimeToRegrow = 30;
             end
             % Properties from organism:
             obj.Species = options.Name;
@@ -41,6 +43,7 @@ classdef plant < organism
             obj.StepDied = -1;
             obj.ColourAlive = options.ColourAlive;
             obj.ColourDead = options.ColourDead;
+            obj.TimeToRegrow = options.TimeToRegrow;
         end
         
         function isEaten(obj, currTimeStep)
@@ -48,6 +51,17 @@ classdef plant < organism
             if obj.Energy <= 0
                 obj.IsAlive = false;
                 obj.StepDied = currTimeStep;
+                obj.Colour = obj.ColourDead;
+            end
+        end
+        
+        function grow(obj, currTimeStep)
+            if ~obj.IsAlive
+                if currTimeStep >= obj.StepDied + obj.TimeToRegrow
+                    obj.IsAlive = true;
+                    obj.Colour = obj.ColourAlive;
+                    obj.Energy = 1;
+                end
             end
         end
     end

@@ -2,12 +2,11 @@ function obj = stepPlants(obj)
 %UNTITLED3 Summary of this function goes here
 %   Detailed explanation goes here
 
-plantGrid = obj.worldGrid;
-for ii = 1:numel(plantGrid)
-    plantGrid(ii).Energy = plantGrid(ii).Energy + 1;
+for ii = 1:obj.edgeLength
+    for jj = 1:obj.edgeLength
+        obj.worldGrid(ii, jj).grow(obj.currTimeStep);
+    end
 end
-
-obj.worldGrid = plantGrid;
 
 end
 

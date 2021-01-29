@@ -1,4 +1,4 @@
-function eats(obj, world, currTimeStep)
+function eats(obj, world)
 
 persistent foodLocs idxOfPrey previousPrey
 
@@ -15,8 +15,11 @@ localY = round(obj.Coordinate(2));
 
 %TODO: this should be smarter for a plant class
 if obj.FeedsOn == "Grass"
-    if world.worldGrid(localX, localY).Energy > 1
-        world.worldGrid(localX, localY).isEaten(currTimeStep);
+    if world.worldGrid(localX, localY).Energy >= 1
+        world.worldGrid(localX, localY).isEaten(world.currTimeStep);
+    else
+        % Herbivore is hungry
+        return
     end
 else
     foodNearMe = find(...

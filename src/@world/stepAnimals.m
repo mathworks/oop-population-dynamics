@@ -1,4 +1,4 @@
-function obj = stepAnimals(obj, currTimeStep)
+function obj = stepAnimals(obj)
 
 % Do the animals in reverse food chain order, that is process the prey
 % before the predator.
@@ -13,37 +13,41 @@ for ii = numel(obj.foodOrder):-1:1
     bornAnimals = {};
     
     for jj = 1:numel(myCurrAnimals)
+        % Carve off a conveniance variable and remember as this is a handle
+        % class then the changes will automatically propagate back
+        currAnimal = myCurrAnimals(jj);
+        
         % Sanity check for dead animal 
-        if ~myCurrAnimals(jj).IsAlive
+        if ~currAnimal.IsAlive
             continue
         end
         % Move
-        myCurrAnimals(jj) = myCurrAnimals(jj).move(obj.edgeLength);
+        currAnimal = currAnimal.move(obj.edgeLength);
         
         % Eat
-        myCurrAnimals(jj).eats(obj, currTimeStep);
+        currAnimal.eats(obj);
         
         % Expend energy
-        myCurrAnimals(jj).expendEnergy()
-        if ~myCurrAnimals(jj).IsAlive
+        currAnimal.expendEnergy()
+        if ~currAnimal.IsAlive
             continue
         end
         
         % Do we breed?
         breedDiceRoll = randi([0, 100], 1) / 100;
-        if breedDiceRoll < myCurrAnimals(jj).ProbReproduce
-            myCurrAnimals(jj).Energy = myCurrAnimals(jj).Energy / 2;
+        if breedDiceRoll < currAnimal.ProbReproduce
+            currAnimal.Energy = currAnimal.Energy / 2;
             %TODO: has to be better to this:
             newAnimal = animal(...
-                'Name', myCurrAnimals(jj).Species, ...
-                'FeedsOn', myCurrAnimals(jj).FeedsOn, ...
-                'Colour', myCurrAnimals(jj).Colour, ...
-                'LineColour', myCurrAnimals(jj).LineColour, ...
-                'ProbReproduce', myCurrAnimals(jj).ProbReproduce, ...
-                'GainFromFood', myCurrAnimals(jj).GainFromFood, ...
-                'Energy', myCurrAnimals(jj).Energy, ...
-                'Marker', myCurrAnimals(jj).Marker, ...
-                'Coordinate', myCurrAnimals(jj).Coordinate);
+                'Name', currAnimal.Species, ...
+                'FeedsOn', currAnimal.FeedsOn, ...
+                'Colour', currAnimal.Colour, ...
+                'LineColour', currAnimal.LineColour, ...
+                'ProbReproduce', currAnimal.ProbReproduce, ...
+                'GainFromFood', currAnimal.GainFromFood, ...
+                'Energy', currAnimal.Energy, ...
+                'Marker', currAnimal.Marker, ...
+                'Coordinate', currAnimal.Coordinate);
             if isempty(bornAnimals)
                 bornAnimals = newAnimal;
             else
