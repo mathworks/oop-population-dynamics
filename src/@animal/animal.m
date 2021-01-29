@@ -75,6 +75,15 @@ classdef animal < organism
             
             obj.Coordinate = nextCoord;
         end
+        
+        function newAnimal = breed(obj)
+            newAnimal = animal.empty;
+            breedDiceRoll = randi([0, 100], 1) / 100;
+            if breedDiceRoll < obj.ProbReproduce
+                obj.Energy = obj.Energy / 2;
+                newAnimal = copy(obj);
+            end
+        end
     end
 end
 

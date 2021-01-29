@@ -10,7 +10,7 @@ for ii = numel(obj.foodOrder):-1:1
     end
     
     myCurrAnimals = obj.myAnimals{idxAnimal};
-    bornAnimals = {};
+    bornAnimals = animal.empty;
     
     for jj = 1:numel(myCurrAnimals)
         % Carve off a conveniance variable and remember as this is a handle
@@ -21,6 +21,7 @@ for ii = numel(obj.foodOrder):-1:1
         if ~currAnimal.IsAlive
             continue
         end
+        
         % Move
         currAnimal.move(obj.edgeLength);
         
@@ -34,36 +35,16 @@ for ii = numel(obj.foodOrder):-1:1
         end
         
         % Do we breed?
-        breedDiceRoll = randi([0, 100], 1) / 100;
-        if breedDiceRoll < currAnimal.ProbReproduce
-            currAnimal.Energy = currAnimal.Energy / 2;
-            %TODO: has to be better to this:
-            newAnimal = animal(...
-                'Name', currAnimal.Species, ...
-                'FeedsOn', currAnimal.FeedsOn, ...
-                'Colour', currAnimal.Colour, ...
-                'LineColour', currAnimal.LineColour, ...
-                'ProbReproduce', currAnimal.ProbReproduce, ...
-                'GainFromFood', currAnimal.GainFromFood, ...
-                'Energy', currAnimal.Energy, ...
-                'Marker', currAnimal.Marker, ...
-                'Coordinate', currAnimal.Coordinate);
-            if isempty(bornAnimals)
-                bornAnimals = newAnimal;
-            else
-                bornAnimals(end+1, 1) = newAnimal; %#ok<AGROW>
-            end
+        newAnimal = currAnimal.breed();
+        if ~isempty(newAnimal)
+            bornAnimals = vertcat(bornAnimals, newAnimal); %#ok<AGROW>
         end
     end
     
-    % Kill hungry animals and birth new ones
-    %TODO: this is hack, probably should be a handle class
+    % Remove dead animals and add the new borns
     idxToDrop = ~[myCurrAnimals.IsAlive];
     myCurrAnimals(idxToDrop) = [];
-    
-    if ~isempty(bornAnimals)
-        myCurrAnimals = vertcat(myCurrAnimals, bornAnimals); %#ok<AGROW>
-    end
+    myCurrAnimals = vertcat(myCurrAnimals, bornAnimals); %#ok<AGROW>
     
     obj.myAnimals{idxAnimal} = myCurrAnimals;
 end
