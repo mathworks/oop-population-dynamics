@@ -32,14 +32,7 @@ classdef moveSimple < move
             nextCoord = currCoord + nextStep;
             
             % Unwrap in case we go out of bounds:
-            for kk = 1:2
-                if nextCoord(kk) > (world.edgeLength + 0.5)
-                    nextCoord(kk) = nextCoord(kk) - world.edgeLength;
-                end
-                if nextCoord(kk) < 0.5
-                    nextCoord(kk) = nextCoord(kk) + world.edgeLength;
-                end
-            end
+            nextCoord = obj.unwrapCoord(nextCoord, world.edgeLength);
             
             animal.Coordinate = nextCoord;
         end
