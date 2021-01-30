@@ -15,14 +15,13 @@ classdef moveSimple < movement.move
             % Base movement method
             currCoord = animal.Coordinate;
             
-            % Random walk:
-            % nextStep = randi(3, 2, 1, 'int16') - int16(2);
-            
             % NetLogo style:
+            maxTurnAngle = 50;
             baseVector = animal.directionUnitVector;
             myAngle = atan2(baseVector(2), ...
                 baseVector(1));
-            myTurn = (randi([0 50]) + randi([-50 0])) / 180 * pi;
+            myTurn = (randi([0 maxTurnAngle]) ...
+                + randi([-maxTurnAngle 0])) / 180 * pi;
             myAngle = myAngle + myTurn;
             animal.directionUnitVector(1) = cos(myAngle);
             animal.directionUnitVector(2) = sin(myAngle);
