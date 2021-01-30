@@ -1,4 +1,4 @@
-classdef moveSimple < move
+classdef moveSimple < movement.move
     %UNTITLED Summary of this class goes here
     %   Detailed explanation goes here
     

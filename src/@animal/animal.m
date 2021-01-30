@@ -28,7 +28,7 @@ classdef animal < organism
                 options.Marker = 'o';
                 options.Coordinate = [1, 1];
                 
-                options.move = moveSimple();
+                options.move = movement.moveSimple();
             end
             
             obj.Species = options.Name;
