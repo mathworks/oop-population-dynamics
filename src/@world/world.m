@@ -114,7 +114,7 @@ classdef world < handle
                     otherwise
                         error('WORLD:Construct:UnknownClass', ...
                             'Unknown class: %s', ...
-                            thisOrganism.Class)
+                            class(organism))
                 end
             end
            
