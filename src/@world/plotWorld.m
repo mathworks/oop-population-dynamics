@@ -2,10 +2,17 @@ function obj = plotWorld(obj)
 %PLOTWORLD Function to plot the world figure
 
 if isempty(obj.axWorld)
+    % Change the figure size and move to the centre of the monitor
     figWorld = figure;
-    obj.axWorld = axes(figWorld);
-else
-%     delete(obj.axWorld.Children);
+    figWorld.Units = 'normalized';
+    figWorld.Position(3) = figWorld.Position(3) * 2;
+    figWorld.Position(1:2) = 0.5 - (figWorld.Position(3:4) ./ 2);
+    
+    worldTile = tiledlayout(figWorld, 1, 2, ...
+        'TileSpacing', 'compact', ...
+        'Padding', 'compact');
+    obj.axWorld = axes(worldTile);
+    obj.axPops = nexttile(worldTile);
 end
 
 persistent locX myZ colourGrid
@@ -42,15 +49,17 @@ end
 colourGrid(1:obj.edgeLength, 1:obj.edgeLength, :) = obj.worldColour;
 
 if isempty(obj.handleSurface)
-    hold on
+    hold(obj.axWorld, 'on')
     obj.handleSurface = surf(obj.axWorld, ...
         locX, locX, myZ, ...
         colourGrid, ...
         'LineStyle', 'none');
-    hold off
+    hold(obj.axWorld, 'off')
     view(obj.axWorld, 2)
     obj.axWorld.XLim = [0.5, obj.edgeLength + 0.5];
     obj.axWorld.YLim = [0.5, obj.edgeLength + 0.5];
+    obj.axWorld.XTick = [];
+    obj.axWorld.YTick = [];
 else
     set(obj.handleSurface, ...
         'CData', colourGrid)
@@ -60,11 +69,9 @@ end
 persistent handleTitle
 titleText = ['Simulation at Step: ', num2str(obj.currTimeStep)];
 if isempty(handleTitle)
-    handleTitle = title(titleText);
+    handleTitle = title(obj.axWorld, titleText);
 else
     handleTitle.String = titleText;
 end
-
-drawnow()
 
 end

@@ -24,6 +24,7 @@ classdef world < handle
         nSteps
         worldPatches
         axWorld
+        axPops
         foodWeb
         foodOrder
         currTimeStep double = 0
@@ -122,8 +123,7 @@ classdef world < handle
             obj = getFoodWeb(obj);
             
             % initial set up so plot
-            plotWorld(obj);
-            obj = plotPops(obj);
+            doPlots(obj)
         end
         
         function obj = run(obj)
@@ -135,26 +135,24 @@ classdef world < handle
                 if endCheck(obj)
                     break
                 end
-                plotWorld(obj);
-                obj = plotPops(obj);
+                doPlots(obj)
             end
         end
         
         function obj = plotPops(obj)
+            % Must be run after plotWorld to create the figures
             plantDivider = 4;
             nOrganisms = numel(obj.myAnimals);
-            if isempty(obj.figPops)
-                obj.figPops = figure;
+            if isempty(obj.populationCounts)
                 obj.populationCounts = NaN(obj.nSteps + 1, nOrganisms + 1);
             end
             
-            clf(obj.figPops)
-            popAxes = gca(obj.figPops);
+            cla(obj.axPops)
             myLines = zeros(numel(obj.myAnimals) + 1, 1);
             myLegendItems = cell(numel(obj.myAnimals) + 1, 1);
             for ii = 1:numel(obj.myAnimals)
                 obj.populationCounts(obj.currTimeStep+1, ii) = numel(obj.myAnimals{ii});
-                myLines(ii) = line(popAxes, ...
+                myLines(ii) = line(obj.axPops, ...
                     0:obj.currTimeStep, ...
                     obj.populationCounts(1:obj.currTimeStep+1, ii), ...
                     'Color', obj.myAnimals{ii}(1).LineColour, ...
@@ -162,15 +160,26 @@ classdef world < handle
                 myLegendItems{ii} = obj.myAnimals{ii}(1).Species;
             end
             obj.populationCounts(obj.currTimeStep+1, end) = obj.plantAliveCount;
-            myLines(end) = line(popAxes, ...
+            myLines(end) = line(obj.axPops, ...
                 0:obj.currTimeStep, ...
                 obj.populationCounts(1:obj.currTimeStep+1, end) / plantDivider, ...
                 'Color', obj.worldGrid(1,1).ColourAlive, ...
                 'LineWidth' , 1);
             myLegendItems{end} = ['Plants (/', num2str(plantDivider), ')'];
-            legend(myLines, myLegendItems, ...
+            legend(obj.axPops, myLines, myLegendItems, ...
                 'Location', 'NorthWest')
-            popAxes.YLim(1) = 0;          
+            obj.axPops.YLim = [0 Inf];
+            
+            
+            xlabel('Simulation Step')
+            ylabel('Population Sizes')
+            persistent handleTitle
+            titleText = ['Population Counts at Step: ', num2str(obj.currTimeStep)];
+            if isempty(handleTitle)
+                handleTitle = title(obj.axPops, titleText);
+            else
+                handleTitle.String = titleText;
+            end
         end
         
 %         function stepPlants(obj)
@@ -197,6 +206,12 @@ classdef world < handle
                     break;
                 end
             end
+        end
+        
+        function doPlots(obj)
+            plotWorld(obj);
+            plotPops(obj);
+            drawnow();
         end
     end
     
