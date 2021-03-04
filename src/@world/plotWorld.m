@@ -26,6 +26,7 @@ end
 
 % Do animals first as I can use an isempty from later
 animalLocs = obj.animalLocations;
+myLegendItems = cell(numel(obj.myAnimals), 1);
 for ii = 1:numel(animalLocs)
     tmpX = animalLocs(ii).coord(:, 1);
     tmpY = animalLocs(ii).coord(:, 2);
@@ -43,6 +44,8 @@ for ii = 1:numel(animalLocs)
             'YData', tmpY, ...
             'Zdata', tmpZ)
     end
+    
+    myLegendItems{ii} = obj.myAnimals{ii}(1).Species;
 end
 
 
@@ -73,5 +76,8 @@ if isempty(handleTitle)
 else
     handleTitle.String = titleText;
 end
+
+legend(obj.axWorld, [obj.handleAnimals{:}], myLegendItems, ...
+    'Location', 'BestOutside')
 
 end
