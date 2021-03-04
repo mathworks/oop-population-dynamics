@@ -18,13 +18,14 @@ classdef world < handle
     properties (Access = public)
         worldGrid plant
         myAnimals
-        figPops
         handleSurface
         handleAnimals
         nSteps
         worldPatches
+        figToPlot
         axWorld
         axPops
+        printPlots = false
         foodWeb
         foodOrder
         currTimeStep double = 0
@@ -50,12 +51,14 @@ classdef world < handle
                 options.nSteps = 1000
                 options.worldSideLen = 100;
                 options.debug = false;
+                options.printPlots = false
             end
             
             % Base properties.
             obj.nSteps = options.nSteps;
             obj.edgeLength = options.worldSideLen;
             obj.debug = options.debug;
+            obj.printPlots = options.printPlots;
 
             % Prepare to unpack
             obj.myAnimals = {};
@@ -212,6 +215,13 @@ classdef world < handle
             plotWorld(obj);
             plotPops(obj);
             drawnow();
+            if obj.printPlots
+                fName = sprintf('simFigure_%04d.png', ...
+                    obj.currTimeStep);
+                exportgraphics(obj.figToPlot, ...
+                    fName, ...
+                    'Resolution', 300)
+            end
         end
     end
     

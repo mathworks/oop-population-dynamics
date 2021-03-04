@@ -38,7 +38,8 @@ nDingos = 50;
 %% Set Up The World
 mySim = world({myGrass, mySheep, myDingos}, ...
     [Inf, nSheep, nDingos], ...
-    'nSteps', 250);
+    'nSteps', 250, ...
+    'printPlots', false);
 
 %% Plot a food web
 plotFoodWeb(mySim)

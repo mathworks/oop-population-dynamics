@@ -3,12 +3,12 @@ function obj = plotWorld(obj)
 
 if isempty(obj.axWorld)
     % Change the figure size and move to the centre of the monitor
-    figWorld = figure;
-    figWorld.Units = 'normalized';
-    figWorld.Position(3) = figWorld.Position(3) * 2;
-    figWorld.Position(1:2) = 0.5 - (figWorld.Position(3:4) ./ 2);
+    obj.figToPlot = figure;
+    obj.figToPlot.Units = 'normalized';
+    obj.figToPlot.Position(3) = obj.figToPlot.Position(3) * 2;
+    obj.figToPlot.Position(1:2) = 0.5 - (obj.figToPlot.Position(3:4) ./ 2);
     
-    worldTile = tiledlayout(figWorld, 1, 2, ...
+    worldTile = tiledlayout(obj.figToPlot, 1, 2, ...
         'TileSpacing', 'compact', ...
         'Padding', 'compact');
     obj.axWorld = axes(worldTile);
