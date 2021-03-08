@@ -46,7 +46,7 @@ else
     
     % Drop dead animals
     for ii = numel(foodNearMe):-1:1
-        if ~world.myAnimals{1}(foodNearMe(ii)).IsAlive
+        if ~world.myAnimals{idxOfPrey}(foodNearMe(ii)).IsAlive
             foodNearMe(ii) = [];
         end
     end
