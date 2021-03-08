@@ -1,4 +1,18 @@
 function eats(obj, world)
+% eats
+%   Method that is undertaken when an organism wishes to eat.  This method
+%   knows about the food web and looks for this organism's prey to eat on.
+%
+%   Input/s:
+%       -) the object itself
+%       -) the world object
+%
+%   Output/s:
+%       -) none
+%
+%   Dr Peter Brady <pbrady@mathworks.com>
+%   2021-03-08
+%   © 2021 The MathWorks, Inc.
 
 persistent foodLocs idxOfPrey previousPrey
 
