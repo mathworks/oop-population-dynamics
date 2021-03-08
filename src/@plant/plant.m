@@ -1,6 +1,13 @@
 classdef plant < organism
-    %PLANT Summary of this class goes here
-    %   Detailed explanation goes here
+    %PLANT Concrete instance of an organism to represent a generic plant
+    %   This class inherits all properties of the organism class and then
+    %   implements some additional layers, as well as providing concrete
+    %   instances of the abstract methods of organism, specific for plants
+    %   to be modelled.
+    %
+    %   Dr Peter Brady <pbrady@mathworks.com>
+    %   2021-03-08
+    %   © 2021 The MathWorks, Inc.
     
     properties (Access = public)
         StepDied (1,1) double % To track how long to regrow
@@ -11,9 +18,10 @@ classdef plant < organism
     
     methods
         function obj = plant(options)
-            %PLANT Construct an instance of this class
-            %   Detailed explanation goes here
+            %PLANT Constructor for this object.
             arguments
+                % Define arguments and defaults for all properties, for
+                % ordering list the organism first, then plants, etc.
                 options.Name string = ""
                 options.FeedsOn string = ""
                 options.Colour = [70, 242, 128] / 255;
@@ -47,6 +55,8 @@ classdef plant < organism
         end
         
         function isEaten(obj, currTimeStep)
+            % ISEATEN method to change the plant's internal representation
+            % if it is eaten by a harbivore.
             obj.Energy = obj.Energy - 1;
             if obj.Energy <= 0
                 obj.IsAlive = false;
@@ -56,6 +66,10 @@ classdef plant < organism
         end
         
         function grow(obj, currTimeStep)
+            % GROW method to grow the plant, may optionally bring the plant
+            % back to life it it is "dead" say if grass is eaten to the
+            % ground it may take 20 periods to regrow sufficiently to be
+            % considered alive and suitable to be eaten again.
             if ~obj.IsAlive
                 if currTimeStep >= obj.StepDied + obj.TimeToRegrow
                     obj.IsAlive = true;
