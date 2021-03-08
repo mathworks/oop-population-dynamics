@@ -25,7 +25,8 @@ classdef moveSimple < movement.move
             myAngle = myAngle + myTurn;
             animal.directionUnitVector(1) = cos(myAngle);
             animal.directionUnitVector(2) = sin(myAngle);
-            nextStep = animal.directionUnitVector';
+            nextStep = animal.directionUnitVector' ...
+                * animal.movePerStep;
             
             % Step:
             nextCoord = currCoord + nextStep;
