@@ -1,9 +1,16 @@
 classdef animal < organism
-    %ANIMAL Summary of this class goes here
-    %   Detailed explanation goes here
+    %ANIMAL Concrete instance of an organism to represent a generic animal
+    %   This class inherits all properties of the organism class and then
+    %   implements some additional layers, as well as providing concrete
+    %   instances of the abstract methods of organism, specific for animals
+    %   to be modelled.
+    %
+    %   Dr Peter Brady <pbrady@mathworks.com>
+    %   2021-03-08
+    %   © 2021 The MathWorks, Inc.
     
     properties
-        Marker string % Marker for this species
+        Marker string % Marker for this species on the graph when plotting
     end
     
     properties (Access = public)
@@ -15,9 +22,10 @@ classdef animal < organism
     
     methods
         function obj = animal(options)
-            %ANIMAL Construct an instance of this class
-            %   Detailed explanation goes here
+            %ANIMAL Constructor for this object.
             arguments
+                % Define arguments and defaults for all properties, for
+                % ordering list the organism first, then animals, etc.
                 options.Name string = ""
                 options.FeedsOn string = ""
                 options.Colour = [0, 0, 0] / 255;
@@ -50,6 +58,10 @@ classdef animal < organism
         end
         
         function newAnimal = breed(obj)
+            % NEWANIMAL Method to simulate this animal breeding.  It does
+            % two things: (1) halves the energy that this animal has with
+            % half staying here and the second going to the child. (2)
+            % clones the animal to create a new animal.
             newAnimal = animal.empty;
             breedDiceRoll = randi([0, 100], 1) / 100;
             if breedDiceRoll < obj.ProbReproduce
@@ -59,6 +71,10 @@ classdef animal < organism
         end
         
         function nextStep(obj, world)
+            % NEXTSTEP Method to cause this animal to take the next step.
+            % Generally this would be a method that is implemented in a
+            % move class and this is a conveniance method to minimise
+            % nesting levels when called at a world level.
             obj.move.nextStep(obj, world);
         end
     end
