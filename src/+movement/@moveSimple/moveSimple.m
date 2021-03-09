@@ -1,27 +1,40 @@
 classdef moveSimple < movement.move
-    %UNTITLED Summary of this class goes here
-    %   Detailed explanation goes here
+    %MOVESIMPLE Concrete instance of a move class to represent NetLogo move
+    %   This moveSimple class is a concrete instance of a move abstract
+    %   class that represents an implementation of the NetLogo style
+    %   movement.  That is the object moves in a certain direction but at
+    %   each step rolls a dice to see how far it turns left, and then again
+    %   for a right turn.
+    %
+    %   Dr Peter Brady <pbrady@mathworks.com>
+    %   2021-03-08
+    %   © 2021 The MathWorks, Inc.
     
     properties
+        maxTurnAngle double;
     end
     
     methods
-        function obj = moveSimple()
-            %UNTITLED Construct an instance of this class
-            %   Detailed explanation goes here
+        function obj = moveSimple(options)
+            %MOVESIMPLE Constructor for this object
+            arguments
+                options.maxTurnAngle double = 50
+            end
+            
+            obj.maxTurnAngle = options.maxTurnAngle;
         end
         
         function obj = nextStep(obj, animal, world)
-            % Base movement method
+            % NEXTSTEP Concrete instance of the abstract movement operation
+
             currCoord = animal.Coordinate;
             
-            % NetLogo style:
-            maxTurnAngle = 50;
+            
             baseVector = animal.directionUnitVector;
             myAngle = atan2(baseVector(2), ...
                 baseVector(1));
-            myTurn = (randi([0 maxTurnAngle]) ...
-                + randi([-maxTurnAngle 0])) / 180 * pi;
+            myTurn = (randi([0 obj.maxTurnAngle]) ...
+                + randi([-obj.maxTurnAngle 0])) / 180 * pi;
             myAngle = myAngle + myTurn;
             animal.directionUnitVector(1) = cos(myAngle);
             animal.directionUnitVector(2) = sin(myAngle);
