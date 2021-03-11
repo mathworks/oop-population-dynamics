@@ -16,7 +16,7 @@ if isempty(obj.axWorld)
 end
 
 persistent locX myZ colourGrid
-if isempty(locX) || isempty(myZ) || isempty(colourGrid)
+if obj.currTimeStep == 0
     locX = 0.5:1:double(obj.edgeLength)+0.5;
     myZ = zeros(obj.edgeLength+1, obj.edgeLength+1);
     colourGrid = obj.worldColour;
@@ -24,20 +24,41 @@ if isempty(locX) || isempty(myZ) || isempty(colourGrid)
     colourGrid(:, end+1, :) = colourGrid(:, end, :);
 end
 
+persistent myLegendItems myLegendText
+if obj.currTimeStep == 0
+    myLegendItems = struct(...
+        'LineStyle', 'none', ...
+        'Marker', 'x', ...
+        'Color', [1,1,1], ...
+        'LineWidth', 1);
+end
+
 % Do animals first as I can use an isempty from later
 animalLocs = obj.animalLocations;
-myLegendItems = cell(numel(obj.myAnimals), 1);
+
 for ii = 1:numel(animalLocs)
-    tmpX = animalLocs(ii).coord(:, 1);
-    tmpY = animalLocs(ii).coord(:, 2);
-    tmpZ = 100 * ones(size(animalLocs(ii).coord, 1), 1);
+    if obj.currTimeStep == 0
+        myLegendItems(ii) = struct(...
+            'LineStyle', 'none', ...
+            'Marker', obj.myAnimals{ii}(1).Marker, ...
+            'Color', obj.myAnimals{ii}(1).Colour, ...
+            'LineWidth', 1);
+        myLegendText{ii} = obj.myAnimals{ii}(1).Species;
+    end
+    
+    if isempty(animalLocs(ii).coord)
+        tmpX = -1;
+        tmpY = -1;
+        tmpZ = -100;
+    else
+        tmpX = animalLocs(ii).coord(:, 1);
+        tmpY = animalLocs(ii).coord(:, 2);
+        tmpZ = 100 * ones(size(animalLocs(ii).coord, 1), 1);
+    end
     if isempty(obj.handleSurface)
         obj.handleAnimals{ii} = line(obj.axWorld, ...
             tmpX, tmpY, tmpZ, ...
-            'LineStyle', 'none', ...
-            'Marker', animalLocs(ii).Marker, ...
-            'Color', animalLocs(ii).Colour, ...
-            'LineWidth', 1);
+            myLegendItems(ii));
     else
         set(obj.handleAnimals{ii}, ...
             'XData', tmpX, ...
@@ -45,7 +66,6 @@ for ii = 1:numel(animalLocs)
             'Zdata', tmpZ)
     end
     
-    myLegendItems{ii} = obj.myAnimals{ii}(1).Species;
 end
 
 
@@ -77,7 +97,7 @@ else
     handleTitle.String = titleText;
 end
 
-legend(obj.axWorld, [obj.handleAnimals{:}], myLegendItems, ...
+legend(obj.axWorld, [obj.handleAnimals{:}], myLegendText, ...
     'Location', 'BestOutside')
 
 end

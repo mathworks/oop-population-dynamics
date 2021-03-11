@@ -150,26 +150,42 @@ classdef world < handle
                 obj.populationCounts = NaN(obj.nSteps + 1, nOrganisms + 1);
             end
             
+            persistent myLineProps myLegendText
+            if obj.currTimeStep == 0
+                myLineProps = struct(...
+                    'Color', [1,1,1], ...
+                    'LineWidth', 1);
+            end
+            
             cla(obj.axPops)
             myLines = zeros(numel(obj.myAnimals) + 1, 1);
-            myLegendItems = cell(numel(obj.myAnimals) + 1, 1);
             for ii = 1:numel(obj.myAnimals)
+                if obj.currTimeStep == 0
+                    myLineProps(ii) = struct(...
+                        'Color', obj.myAnimals{ii}(1).LineColour, ...
+                        'LineWidth', 1);
+                    myLegendText{ii} = obj.myAnimals{ii}(1).Species;
+                end
+                
                 obj.populationCounts(obj.currTimeStep+1, ii) = numel(obj.myAnimals{ii});
                 myLines(ii) = line(obj.axPops, ...
                     0:obj.currTimeStep, ...
                     obj.populationCounts(1:obj.currTimeStep+1, ii), ...
-                    'Color', obj.myAnimals{ii}(1).LineColour, ...
-                    'Linewidth', 1);
-                myLegendItems{ii} = obj.myAnimals{ii}(1).Species;
+                    myLineProps(ii));
+                
             end
             obj.populationCounts(obj.currTimeStep+1, end) = obj.plantAliveCount;
+            if obj.currTimeStep == 0
+                myLineProps(end+1) = struct(...
+                    'Color', obj.worldGrid(1,1).ColourAlive, ...
+                    'LineWidth', 1);
+                myLegendText{end+1} = ['Plants (/', num2str(plantDivider), ')'];
+            end
             myLines(end) = line(obj.axPops, ...
                 0:obj.currTimeStep, ...
                 obj.populationCounts(1:obj.currTimeStep+1, end) / plantDivider, ...
-                'Color', obj.worldGrid(1,1).ColourAlive, ...
-                'LineWidth' , 1);
-            myLegendItems{end} = ['Plants (/', num2str(plantDivider), ')'];
-            legend(obj.axPops, myLines, myLegendItems, ...
+                myLineProps(end));
+            legend(obj.axPops, myLines, myLegendText, ...
                 'Location', 'NorthWest')
             obj.axPops.YLim = [0 Inf];
             
@@ -204,7 +220,8 @@ classdef world < handle
         function idxOfPrey = getAnimalIdxByName(obj, speciesName)
             idxOfPrey = -1;
             for ii = 1:numel(obj.myAnimals)
-                if speciesName == obj.myAnimals{ii}(1).Species
+                if ~isempty(obj.myAnimals{ii}) ...
+                        && speciesName == obj.myAnimals{ii}(1).Species
                     idxOfPrey = ii;
                     break;
                 end
@@ -227,11 +244,13 @@ classdef world < handle
     
     methods (Access = private)
         function atTheEnd = endCheck(obj)
-            atTheEnd = false;
+%             atTheEnd = false;
             
+            % if any animal is living continue
+            atTheEnd = true;
             for ii = 1:numel(obj.myAnimals)
-                if numel(obj.myAnimals{ii}) == 0
-                    atTheEnd = true;
+                if ~isempty(obj.myAnimals{ii})
+                    atTheEnd = false;
                     break
                 end
             end
@@ -254,8 +273,6 @@ classdef world < handle
         function animalLocs = get.animalLocations(obj)
             for ii = 1:numel(obj.myAnimals)
                 myAnimal = obj.myAnimals{ii};
-                animalLocs(ii).Colour = myAnimal(1).Colour; %#ok<AGROW>
-                animalLocs(ii).Marker = myAnimal(1).Marker; %#ok<AGROW>
                 animalLocs(ii).coord = [myAnimal.Coordinate]'; %#ok<AGROW>
             end
         end

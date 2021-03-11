@@ -14,13 +14,18 @@ function eats(obj, world)
 %   2021-03-08
 %   © 2021 The MathWorks, Inc.
 
-persistent foodLocs idxOfPrey previousPrey
+persistent foodLocs idxOfPrey previousPrey previousTimeStep
 
-if isempty(previousPrey) || obj.FeedsOn ~= previousPrey
+if isempty(previousPrey) ...
+        || obj.FeedsOn ~= previousPrey ...
+        || world.currTimeStep ~= previousTimeStep
+    previousTimeStep = world.currTimeStep;
     previousPrey = obj.FeedsOn;
     idxOfPrey = getAnimalIdxByName(world, previousPrey);
     if idxOfPrey >= 1
         foodLocs = [world.myAnimals{idxOfPrey}.Coordinate];
+    else
+        foodLocs = [];
     end
 end
 
@@ -36,6 +41,11 @@ if obj.FeedsOn == "Grass"
         return
     end
 else
+    if isempty(foodLocs)
+        % No food at all!
+        return
+    end
+    
     foodNearMe = find(...
         abs(foodLocs(1, :) - localX) <= 1.25 & ...
         abs(foodLocs(2, :) - localY) <= 1.25);

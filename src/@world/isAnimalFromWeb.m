@@ -7,7 +7,7 @@ idxAnimals = -1;
 mySpecies = obj.foodWeb.Nodes.Name{idxSpecies};
 
 for ii = 1:numel(obj.myAnimals)
-    if obj.myAnimals{ii}(1).Species == mySpecies
+    if ~isempty(obj.myAnimals{ii}) && obj.myAnimals{ii}(1).Species == mySpecies
         myOrganism = true;
         idxAnimals = ii;
         break
