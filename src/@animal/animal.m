@@ -39,7 +39,7 @@ classdef animal < organism
                 options.move = movement.moveSimple();
             end
             
-            obj.Species = options.Name;
+            obj.Name = options.Name;
             obj.FeedsOn = options.FeedsOn;
             obj.Colour = options.Colour;
             if isfield(options, 'LineColour')

@@ -37,7 +37,7 @@ classdef plant < organism
                 options.TimeToRegrow = 30;
             end
             % Properties from organism:
-            obj.Species = options.Name;
+            obj.Name = options.Name;
             obj.FeedsOn = options.FeedsOn;
             obj.Colour = options.Colour;
             obj.LineColour = options.LineColour;

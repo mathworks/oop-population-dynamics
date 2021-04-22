@@ -43,7 +43,7 @@ for ii = 1:numel(animalLocs)
             'Marker', obj.myAnimals{ii}(1).Marker, ...
             'Color', obj.myAnimals{ii}(1).Colour, ...
             'LineWidth', 1);
-        myLegendText{ii} = obj.myAnimals{ii}(1).Species;
+        myLegendText{ii} = obj.myAnimals{ii}(1).Name;
     end
     
     if isempty(animalLocs(ii).coord)
