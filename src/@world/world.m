@@ -26,6 +26,7 @@ classdef world < handle
         axWorld
         axPops
         printPlots = false
+        showPlots = true
         foodWeb
         foodOrder
         currTimeStep double = 0
@@ -49,9 +50,10 @@ classdef world < handle
                 organisms
                 initialCounts
                 options.nSteps = 1000
-                options.worldSideLen = 100;
-                options.debug = false;
+                options.worldSideLen = 100
+                options.debug = false
                 options.printPlots = false
+                options.showPlots = true
             end
             
             % Base properties.
@@ -59,6 +61,7 @@ classdef world < handle
             obj.edgeLength = options.worldSideLen;
             obj.debug = options.debug;
             obj.printPlots = options.printPlots;
+            obj.showPlots = options.showPlots;
 
             % Prepare to unpack
             obj.myAnimals = {};
@@ -126,7 +129,9 @@ classdef world < handle
             obj = getFoodWeb(obj);
             
             % initial set up so plot
-            doPlots(obj)
+            if obj.showPlots
+                doPlots(obj)
+            end
         end
         
         function obj = run(obj)
@@ -138,7 +143,9 @@ classdef world < handle
                 if endCheck(obj)
                     break
                 end
-                doPlots(obj)
+                if obj.showPlots
+                    doPlots(obj)
+                end
             end
         end
         
