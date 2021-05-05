@@ -1,4 +1,4 @@
-# Linking the Species to Grow Dynamic Population Models with MATLAB 
+# Dynamic Population Models with MATLAB Object Oriented Code
 This code is what was presented for the Australian AgTech Webinar on 16th March 2021.  It showcases how to stack together objects to create a world in which plants grow, herbivores eat and are eaten by carnivores.  The key is that this object approach and the world framework is flexible and extensible.  For example, the system can be adapted to model fishing fleets and fish populations, or harvest strategies for logging operations.
 
 ![Screen shot of simulation](img/simulationScreenShot.png)
