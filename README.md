@@ -5,7 +5,7 @@ This code is what was presented for the Australian AgTech Webinar on 16th March 
 
 ## Setup 
 To Run:
-1. Open the MATLAB Project prj file
+1. Open the MATLAB® Project prj file
 2. grassLivesForever.m: for a simple development version where the grass lives forever
 3. grassDies.m: for the final version where the grass is consumed and takes time to regrow
 
