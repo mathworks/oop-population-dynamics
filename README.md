@@ -9,7 +9,7 @@ To Run:
 2. grassLivesForever.m: for a simple development version where the grass lives forever
 3. grassDies.m: for the final version where the grass is consumed and takes time to regrow
 
-### MathWorks Products (http://www.mathworks.com)
+### MathWorks Products (https://www.mathworks.com)
 
 This demonstration was developed in R2021a but should be quite backward compatible.  The following are recommended products as simulations such as this are often placed into a much larger Monte Carlo framework.
 - [Statistics and Machine Learning Toolbox®](https://www.mathworks.com/products/statistics.html)
