@@ -22,4 +22,9 @@ The license for this population modelling code is available in the [LICENSE.TXT]
 ## Community Support
 [MATLAB Central](https://www.mathworks.com/matlabcentral)
 
+## File Exchange
+Also available for direct download on MATLAB File Exchange.
+
+[![View oop-population-dynamics on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://au.mathworks.com/matlabcentral/fileexchange/92378-oop-population-dynamics)
+
 Copyright &copy; 2021 - 2023 The MathWorks, Inc.
