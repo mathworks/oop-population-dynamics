@@ -7,7 +7,7 @@ classdef plant < organism
     %
     %   Dr Peter Brady <pbrady@mathworks.com>
     %   2021-03-08
-    %   © 2021 The MathWorks, Inc.
+    %   Copyright © 2021-2023 The MathWorks, Inc.
     
     properties (Access = public)
         StepDied (1,1) double % To track how long to regrow

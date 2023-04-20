@@ -22,4 +22,4 @@ The license for this population modelling code is available in the [LICENSE.TXT]
 ## Community Support
 [MATLAB Central](https://www.mathworks.com/matlabcentral)
 
-Copyright 2021 The MathWorks, Inc.
+Copyright &copy; 2021 - 2023 The MathWorks, Inc.

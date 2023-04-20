@@ -11,7 +11,7 @@ classdef (Abstract) organism < handle & ...
     %
     %   Dr Peter Brady <pbrady@mathworks.com>
     %   2021-03-08
-    %   © 2021 The MathWorks, Inc.
+    %   Copyright © 2021-2023 The MathWorks, Inc.
     
     properties (Access = public)
         Name string % Name of the species, e.g. sheep, kangaroo, dingo

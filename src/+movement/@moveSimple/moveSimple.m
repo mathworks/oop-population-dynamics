@@ -8,7 +8,7 @@ classdef moveSimple < movement.move
     %
     %   Dr Peter Brady <pbrady@mathworks.com>
     %   2021-03-08
-    %   © 2021 The MathWorks, Inc.
+    %   Copyright © 2021-2023 The MathWorks, Inc.
     
     properties
         maxTurnAngle double;
