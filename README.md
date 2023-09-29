@@ -4,10 +4,13 @@ This code is what was presented for the Australian AgTech Webinar on 16th March 
 ![Screen shot of simulation](img/simulationScreenShot.png)
 
 ## Setup 
+[![Open in MATLAB Online](https://www.mathworks.com/images/responsive/global/open-in-matlab-online.svg)](https://matlab.mathworks.com/open/github/v1?repo=mathworks/oop-population-dynamics&project=805540_agTech.prj)
+[![View oop-population-dynamics on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://au.mathworks.com/matlabcentral/fileexchange/92378-oop-population-dynamics)
+
 To Run:
-1. Open the MATLAB® Project prj file
-2. grassLivesForever.m: for a simple development version where the grass lives forever
-3. grassDies.m: for the final version where the grass is consumed and takes time to regrow
+1. Open the MATLAB® Project prj file and use the project shorcuts:
+2. "Grass Lives Forever" for a simple development version where the grass lives forever
+3. "Grass is Finite but Regrows" for the final version where the grass is consumed and takes time to regrow
 
 ### MathWorks Products (https://www.mathworks.com)
 
@@ -21,10 +24,5 @@ The license for this population modelling code is available in the [LICENSE.TXT]
 
 ## Community Support
 [MATLAB Central](https://www.mathworks.com/matlabcentral)
-
-## File Exchange
-Also available for direct download on MATLAB File Exchange.
-
-[![View oop-population-dynamics on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://au.mathworks.com/matlabcentral/fileexchange/92378-oop-population-dynamics)
 
 Copyright &copy; 2021 - 2023 The MathWorks, Inc.
